@@ -10,7 +10,7 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
-@RequestMapping(path = "api/recruiters")
+@RequestMapping(path = "api/candidates")
 public class CandidateController {
     @Autowired
     private CandidateService candidateService;

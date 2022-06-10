@@ -1,12 +1,12 @@
-package com.example.demo.models.role;
+package com.example.demo.models.job;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "api/roles")
-public class RoleController {
+@RequestMapping(path = "api/jobs")
+public class JobController {
     @Autowired
-    private RoleService roleService;
+    private JobService jobService;
 }

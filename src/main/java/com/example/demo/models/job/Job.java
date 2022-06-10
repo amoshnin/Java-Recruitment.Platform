@@ -18,6 +18,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "jobs")
 public class Job {
+    // General
     @Id
     @Column(name = "job_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,13 +28,26 @@ public class Job {
     private String code;
     private String state;
     private String department;
-    private JobLocation location;
-    @CreatedDate
-    private LocalDate createdAt;
-    @LastModifiedDate
-    private LocalDate modifiedAt;
 
     public String getFullTitle() {
         return String.format("%s - %s", this.title, this.code);
     }
+
+    // Location
+    private String country;
+    private String countryCode;
+    private String region;
+    private String regionCode;
+    private String city;
+    private String zipCode;
+
+    public String getLocationString() {
+        return String.format("%s, %s, %s", this.city, this.region, this.country);
+    }
+
+    // Date
+    @CreatedDate
+    private LocalDate createdAt;
+    @LastModifiedDate
+    private LocalDate modifiedAt;
 }
