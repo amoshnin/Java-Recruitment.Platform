@@ -29,7 +29,7 @@ public class RecruiterController {
         return ResponseEntity.created(location).build();
     }
 
-    @Operation(summary = "Endpoint (for RECRUITER to view details of himself) OR (for ADMIN to view details of any recruiter)", description = "", tags = {"recruiters"})
+    @Operation(summary = "Endpoint (for ADMIN to view details of any recruiter) OR (for RECRUITER to view details of himself)", description = "", tags = {"recruiters"})
     @GetMapping(path = "item/{recruiterId}")
     public Recruiter getItem(@RequestBody Long recruiterId, Principal principal) {
         return this.recruiterService.getItem(recruiterId, principal);

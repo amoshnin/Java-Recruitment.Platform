@@ -17,7 +17,7 @@ public class JobController {
     @Autowired
     private JobService jobService;
 
-    @Operation(summary = "Endpoint (for RECRUITER to view details of one of his jobs) OR (for ADMIN to view details of any job)", description = "", tags = {"jobs"})
+    @Operation(summary = "Endpoint (for ADMIN to view details of any job) OR (for RECRUITER to view details of one of his jobs)", description = "", tags = {"jobs"})
     @GetMapping(path = "item/{jobId}")
     public Job getItem(@PathVariable Long jobId, Principal principal) {
         return this.jobService.getItem(jobId, principal);
