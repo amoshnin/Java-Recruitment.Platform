@@ -1,6 +1,7 @@
 package com.example.demo.models.candidate;
 
 import com.example.demo.models.recruiter.Recruiter;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ public class CandidateController {
         return this.candidateService.getItem(candidateId);
     }
 
+    @Operation(summary = "Endpoint (for RECRUITER to view details of himself) OR (for ADMIN to view details of any recruiter)", description = "", tags = {"recruiters"})
     @PostMapping(path = "item")
     public ResponseEntity<Object> add(@Valid @RequestBody Candidate candidate) {
         Candidate newCandidate = this.candidateService.add(candidate);

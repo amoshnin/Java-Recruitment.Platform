@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface JobRepository extends JpaRepository<Job, Long> {
-    List<Job> findAllByEmail(String email);
+    List<Job> findAllByRecruiter_Email(String email);
 }

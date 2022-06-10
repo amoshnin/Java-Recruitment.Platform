@@ -47,6 +47,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/api/candidates/item/{candidateId}").hasRole("ADMIN")
                 // ADMIN can create accounts for recruiters
                 .antMatchers(HttpMethod.POST,"/api/recruiters/item").hasRole("ADMIN")
+                // RECRUITER can view details of himself
+                .antMatchers(HttpMethod.GET,"/api/recruiters/item/{recruiterId}").hasRole("RECRUITER")
+                // ADMIN can view details of any recruiter
+                .antMatchers(HttpMethod.GET,"/api/recruiters/item/{recruiterId}").hasRole("ADMIN")
 
                 // RECRUITER can create a job
                 .antMatchers(HttpMethod.POST,"/api/jobs/item").hasRole("RECRUITER")

@@ -83,7 +83,7 @@ public class JobService {
     }
 
     public List<Job> getMyListAsRecruiter(Principal principal) {
-        return this.jobRepository.findAllByEmail(principal.getName());
+        return this.jobRepository.findAllByRecruiter_Email(principal.getName());
     }
 
     public List<Job> getAllListAsAdmin(Principal principal) {
