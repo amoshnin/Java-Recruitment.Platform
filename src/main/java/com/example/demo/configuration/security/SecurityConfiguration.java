@@ -47,6 +47,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/api/candidates/item/{candidateId}").hasRole("ADMIN")
                 // ADMIN can create accounts for recruiters
                 .antMatchers(HttpMethod.POST,"/api/recruiters/item").hasRole("ADMIN")
+
+                // RECRUITER can create a job
+                .antMatchers(HttpMethod.POST,"/api/jobs/item").hasRole("RECRUITER")
+                // RECRUITER can update his existing job (importantly, job must already exist)
+                .antMatchers(HttpMethod.PUT,"/api/jobs/item").hasRole("RECRUITER")
+                // ADMIN can update any existing job (importantly, job must already exist)
+                .antMatchers(HttpMethod.PUT,"/api/jobs/item").hasRole("ADMIN")
+                // RECRUITER can view details of his job (importantly, only his job)
+                .antMatchers(HttpMethod.GET,"/api/jobs/item/{jobId}").hasRole("RECRUITER")
+                // ADMIN can view details of any job
+                .antMatchers(HttpMethod.GET,"/api/jobs/item/{jobId}").hasRole("ADMIN")
+                // RECRUITER can list all his jobs (importantly, only his jobs)
+                .antMatchers(HttpMethod.GET,"/api/jobs/list").hasRole("RECRUITER")
+                // ADMIN can list all jobs (importantly, all jobs)
+                .antMatchers(HttpMethod.GET,"/api/jobs/listAll").hasRole("ADMIN")
                 .anyRequest().authenticated().and().httpBasic();
     }
 }

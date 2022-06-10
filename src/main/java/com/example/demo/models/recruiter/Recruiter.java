@@ -1,6 +1,7 @@
 package com.example.demo.models.recruiter;
 
 import com.example.demo.models.Model;
+import com.example.demo.models.job.Job;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,4 +31,7 @@ public class Recruiter implements Model {
     private String firstName;
     private String lastName;
     private final String role = "RECRUITER";
+
+    @OneToMany(mappedBy="recruiter")
+    private List<Job> jobs;
 }

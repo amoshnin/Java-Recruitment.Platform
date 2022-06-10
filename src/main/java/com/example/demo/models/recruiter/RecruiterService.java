@@ -6,10 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
+import java.util.Optional;
+
 @Service
 public class RecruiterService {
     @Autowired
     private RecruiterRepository recruiterRepository;
+
+    public boolean isGivenRecruiterPrincipal(Principal principal, Long recruiterId) {
+        Optional<Recruiter> row = this.recruiterRepository.findRecruiterByEmail(principal.getName());
+        Recruiter recruiter = row.get();
+        return recruiter.getId() == recruiterId;
+    }
 
     public Recruiter add(Recruiter candidate) {
         if (this.recruiterRepository.findRecruiterByEmail(candidate.getEmail()).isPresent()) {

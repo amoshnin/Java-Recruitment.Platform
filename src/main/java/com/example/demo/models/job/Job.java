@@ -1,6 +1,8 @@
 package com.example.demo.models.job;
 
 
+import com.example.demo.models.recruiter.Recruiter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,4 +52,10 @@ public class Job {
     private LocalDate createdAt;
     @LastModifiedDate
     private LocalDate modifiedAt;
+
+    // Recruiter
+    @JsonIgnore // we will see list of posts in user. but we don't want to see a user when requesting a post.
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="fk_recruiter_id", referencedColumnName="recruiter_id")
+    private Recruiter recruiter;
 }
