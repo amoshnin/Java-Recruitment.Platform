@@ -1,6 +1,5 @@
 package com.example.demo.configuration.security;
 
-import com.example.demo.models.recruiter.RecruiterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
-    private RecruiterService recruiterService;
+    private UserService userService;
 
     @Bean
     PasswordEncoder bcryptPasswordEncoder() {
@@ -27,7 +26,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(this.bcryptPasswordEncoder());
-        provider.setUserDetailsService(this.recruiterService);
+        provider.setUserDetailsService(this.userService);
         return provider;
     }
 

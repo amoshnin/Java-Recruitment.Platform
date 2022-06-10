@@ -1,5 +1,6 @@
 package com.example.demo.models.candidate;
 
+import com.example.demo.models.Model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Entity
 @Table(name = "candidates")
-public class Candidate {
+public class Candidate implements Model {
     @Id
     @Column(name = "candidate_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,4 +30,5 @@ public class Candidate {
     private String lastName;
     private String currentTitle;
     private String desiredTitle;
+    private final String role = "CANDIDATE";
 }

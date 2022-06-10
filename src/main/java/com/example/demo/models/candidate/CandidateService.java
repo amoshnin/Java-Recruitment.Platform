@@ -2,7 +2,6 @@ package com.example.demo.models.candidate;
 
 import com.example.demo.configuration.exceptions.FoundException;
 import com.example.demo.configuration.exceptions.NotFoundException;
-import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

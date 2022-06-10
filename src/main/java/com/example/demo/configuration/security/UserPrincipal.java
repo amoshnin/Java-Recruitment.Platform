@@ -1,5 +1,6 @@
-package com.example.demo.models.recruiter;
+package com.example.demo.configuration.security;
 
+import com.example.demo.models.Model;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,26 +11,24 @@ import java.util.Collection;
 import java.util.List;
 
 @AllArgsConstructor
-public class RecruiterPrincipal implements UserDetails {
-    private Recruiter recruiter;
+public class UserPrincipal implements UserDetails {
+    private Model user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> roles = new ArrayList<>();
-        this.recruiter.getRoles().forEach(role -> {
-            roles.add(new SimpleGrantedAuthority(String.format("ROLE_%s", role.getName())));
-        });
+        roles.add(new SimpleGrantedAuthority(String.format("ROLE_%s", this.user.getRole())));
         return roles;
     }
 
     @Override
     public String getPassword() {
-        return this.recruiter.getPassword();
+        return this.user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.recruiter.getEmail();
+        return this.user.getEmail();
     }
 
     @Override

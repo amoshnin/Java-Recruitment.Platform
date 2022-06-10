@@ -1,4 +1,4 @@
-package com.example.demo.models.recruiter;
+package com.example.demo.models.admin;
 
 import com.example.demo.models.Model;
 import lombok.AllArgsConstructor;
@@ -15,18 +15,21 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "recruiters")
-public class Recruiter implements Model {
+@Table(name = "admins")
+public class Admin implements Model {
     @Id
-    @Column(name="recruiter_id")
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "admin_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Email(message = "Email is not correctly formatted")
     @Column(unique = true)
     private String email;
     @Size(min=6, message = "Password should have at least 6 characters")
     private String password;
-    private String firstName;
-    private String lastName;
-    private final String role = "RECRUITER";
+    private final String role = "ADMIN";
+
+    public Admin(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 }
