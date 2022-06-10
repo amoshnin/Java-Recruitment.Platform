@@ -22,8 +22,6 @@ public class CandidateController {
 
     @PostMapping(path = "item")
     public ResponseEntity<Object> add(@Valid @RequestBody Candidate candidate) {
-        System.out.println("here");
-        System.out.println(candidate.getEmail() + " "+  candidate.getPassword());
         Candidate newCandidate = this.candidateService.add(candidate);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

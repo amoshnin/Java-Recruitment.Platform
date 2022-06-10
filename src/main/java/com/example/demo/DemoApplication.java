@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.transaction.Transactional;
 
@@ -19,7 +20,7 @@ public class DemoApplication {
 	@Bean
 	public CommandLineRunner initialData(AdminRepository adminRepository) {
 		return args -> {
-			try { adminRepository.save(new Admin("test@gmail.com", "123456")); } catch(Exception e) {}
+			try { adminRepository.save(new Admin("test@gmail.com", new BCryptPasswordEncoder().encode("123456"))); } catch(Exception e) {}
 		};
 	}
 }
