@@ -1,6 +1,5 @@
 package com.example.demo.models.candidate;
 
-import com.example.demo.models.recruiter.Recruiter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

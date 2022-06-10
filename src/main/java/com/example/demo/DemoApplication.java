@@ -7,7 +7,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import javax.transaction.Transactional;
+
 @SpringBootApplication
+@Transactional
 public class DemoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
@@ -16,9 +19,7 @@ public class DemoApplication {
 	@Bean
 	public CommandLineRunner initialData(AdminRepository adminRepository) {
 		return args -> {
-			adminRepository.save(
-					new Admin("test@gmail.com", "123456")
-			);
+			try { adminRepository.save(new Admin("test@gmail.com", "123456")); } catch(Exception e) {}
 		};
 	}
 }
