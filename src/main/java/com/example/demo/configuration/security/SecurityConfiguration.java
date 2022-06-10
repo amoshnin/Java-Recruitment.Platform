@@ -45,6 +45,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/api/candidates/item").anonymous()
                 // ADMIN can view detail of any candidate
                 .antMatchers(HttpMethod.GET,"/api/candidates/item/{candidateId}").hasRole("ADMIN")
+                // CANDIDATE can view details of himself
+                .antMatchers(HttpMethod.GET,"/api/candidates/item/{candidateId}").hasRole("CANDIDATE")
+
                 // ADMIN can create accounts for recruiters
                 .antMatchers(HttpMethod.POST,"/api/recruiters/item").hasRole("ADMIN")
                 // RECRUITER can view details of himself

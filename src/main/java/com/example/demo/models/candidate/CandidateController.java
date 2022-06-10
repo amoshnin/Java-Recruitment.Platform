@@ -9,6 +9,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.security.Principal;
 
 @RestController
 @RequestMapping(path = "api/candidates")
@@ -16,12 +17,13 @@ public class CandidateController {
     @Autowired
     private CandidateService candidateService;
 
+    @Operation(summary = "Endpoint (for ADMIN to view details of any candidate) OR (for CANDIDATE to view details of himself)", description = "", tags = {"candidates"})
     @GetMapping(path = "item/{candidateId}")
-    public Candidate getItem(@PathVariable Long candidateId) {
-        return this.candidateService.getItem(candidateId);
+    public Candidate getItem(@PathVariable Long candidateId, Principal principal) {
+        return this.candidateService.getItem(candidateId, principal);
     }
 
-    @Operation(summary = "Endpoint (for RECRUITER to view details of himself) OR (for ADMIN to view details of any recruiter)", description = "", tags = {"recruiters"})
+    @Operation(summary = "Endpoint (for anyone unauthorised to create a CANDIDATE)", description = "", tags = {"candidates"})
     @PostMapping(path = "item")
     public ResponseEntity<Object> add(@Valid @RequestBody Candidate candidate) {
         Candidate newCandidate = this.candidateService.add(candidate);
