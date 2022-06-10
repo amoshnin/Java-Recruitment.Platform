@@ -27,5 +27,6 @@ public class Candidate {
     private String password;
     private String firstName;
     private String lastName;
-    private String desired_title;
+    private String currentTitle;
+    private String desiredTitle;
 }
