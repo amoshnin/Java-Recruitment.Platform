@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -39,9 +40,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        AuthFilter authFilter = new AuthFilter(this.authenticationManagerBean());
+        authFilter.setFilterProcessesUrl("/api/login");
+
         http
                 .csrf().disable()
                 .authorizeRequests()
+                // ADMIN/CANDIDATE/RECRUITER can login
+                .antMatchers(HttpMethod.POST,"/api/login").anonymous()
                 // (future) CANDIDATE can create an account for himself (in other words, anyone can create a CANDIDATE account)
                 .antMatchers(HttpMethod.POST,"/api/candidates/item").anonymous()
                 // ADMIN can view detail of any candidate
@@ -82,8 +88,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/api/jobs/listAll/sorted/{sortField}/{descendingSort}").hasRole("ADMIN")
                 // ... sorting ... pagination
                 .antMatchers(HttpMethod.GET,"/api/jobs/listAll/sorted/{sortField}/{descendingSort}/{offset}/{pageSize}").hasRole("ADMIN")
-//                .anyRequest().authenticated().and().httpBasic()
-                .anyRequest().authenticated().and().addFilter(new AuthFilter(this.authenticationManagerBean()));
+                .anyRequest().authenticated().and().addFilter(authFilter);
     }
 
     @Bean
