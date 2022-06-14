@@ -67,8 +67,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/api/jobs/item/{jobId}").hasRole("ADMIN")
                 // RECRUITER can list all his jobs (importantly, only his jobs)
                 .antMatchers(HttpMethod.GET,"/api/jobs/list").hasRole("RECRUITER")
+                // ... pagination
+                .antMatchers(HttpMethod.GET,"/api/jobs/list/{offset}/{pageSize}").hasRole("RECRUITER")
+                // ... sorting
+                .antMatchers(HttpMethod.GET,"/api/jobs/list/sorted/{sortField}/{descendingSort}").hasRole("RECRUITER")
+                // ... sorting ... pagination
+                .antMatchers(HttpMethod.GET,"/api/jobs/list/sorted/{sortField}/{descendingSort}/{offset}/{pageSize}").hasRole("RECRUITER")
                 // ADMIN can list all jobs (importantly, all jobs)
                 .antMatchers(HttpMethod.GET,"/api/jobs/listAll").hasRole("ADMIN")
+                // ... pagination
+                .antMatchers(HttpMethod.GET,"/api/jobs/listAll/{offset}/{pageSize}").hasRole("ADMIN")
+                // ... sorting
+                .antMatchers(HttpMethod.GET,"/api/jobs/listAll/sorted/{sortField}/{descendingSort}").hasRole("ADMIN")
+                // ... sorting ... pagination
+                .antMatchers(HttpMethod.GET,"/api/jobs/listAll/sorted/{sortField}/{descendingSort}/{offset}/{pageSize}").hasRole("ADMIN")
                 .anyRequest().authenticated().and().httpBasic();
     }
 }
