@@ -7,6 +7,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.configuration.exceptions.NotFoundException;
 import com.example.demo.models.Model;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +29,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Operation(summary = "Endpoint (to refresh your expired access token using your refresh token)", description = "", tags = {"auth"})
     @GetMapping(path = "refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         log.info("in refresh getg mapping");
