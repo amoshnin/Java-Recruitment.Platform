@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -40,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        AuthFilter authFilter = new AuthFilter(this.authenticationManagerBean());
+        CustomAuthenticationFilter authFilter = new CustomAuthenticationFilter(this.authenticationManagerBean());
         authFilter.setFilterProcessesUrl("/api/login"); // this url will automatically get permitAll()
 
         http
@@ -86,7 +86,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/api/jobs/listAll/sorted/{sortField}/{descendingSort}").hasRole("ADMIN")
                 // ... sorting ... pagination
                 .antMatchers(HttpMethod.GET,"/api/jobs/listAll/sorted/{sortField}/{descendingSort}/{offset}/{pageSize}").hasRole("ADMIN")
-                .anyRequest().authenticated().and().addFilter(authFilter);
+                .anyRequest()
+                .authenticated()
+                .and()
+                .addFilter(authFilter)
+                .addFilterBefore(new CustomAuthorisationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
