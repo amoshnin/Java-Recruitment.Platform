@@ -28,7 +28,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String input) throws UsernameNotFoundException {
         int colon = input.indexOf("#");
         if (colon == -1) {
-            throw new NotFoundException("Email must include a colon (:) to define user's role");
+            throw new NotFoundException("Email must include a hashtag (#) to define user's role");
         } else {
             String segments[] = input.split("#");
             String role = segments[0];
