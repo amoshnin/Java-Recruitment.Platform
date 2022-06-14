@@ -25,9 +25,12 @@ import java.util.*;
 public class CustomAuthorisationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getServletPath().equals("/api/login")) {
+        log.info("qq");
+        if (request.getServletPath().equals("/api/auth/login") || request.getServletPath().equals("/api/auth/refresh") || request.getServletPath().equals("/api/candidates/item")) {
             filterChain.doFilter(request, response);
+            log.info("pp");
         } else {
+            log.info("zz");
             String authorisationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
             final String bearer = "Bearer ";
             if (authorisationHeader != null && authorisationHeader.startsWith(bearer)) {

@@ -41,13 +41,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         CustomAuthenticationFilter authFilter = new CustomAuthenticationFilter(this.authenticationManagerBean());
-        authFilter.setFilterProcessesUrl("/api/login"); // this url will automatically get permitAll()
+        authFilter.setFilterProcessesUrl("/api/auth/login");
 
         http
                 .csrf().disable()
                 .authorizeRequests()
+                // ADMIN/CANDIDATE/RECRUITER can login
+                .antMatchers(HttpMethod.POST,"/api/auth/login").permitAll()
+                // ADMIN/CANDIDATE/RECRUITER can refresh
+                .antMatchers(HttpMethod.GET,"/api/auth/refresh").permitAll()
                 // (future) CANDIDATE can create an account for himself (in other words, anyone can create a CANDIDATE account)
-                .antMatchers(HttpMethod.POST,"/api/candidates/item").anonymous()
+                .antMatchers(HttpMethod.POST,"/api/candidates/item").permitAll()
                 // ADMIN can view detail of any candidate
                 .antMatchers(HttpMethod.GET,"/api/candidates/item/{candidateId}").hasRole("ADMIN")
                 // CANDIDATE can view details of himself
