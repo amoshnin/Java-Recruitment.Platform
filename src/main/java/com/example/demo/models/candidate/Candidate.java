@@ -30,5 +30,6 @@ public class Candidate implements Model {
     private String lastName;
     private String currentTitle;
     private String desiredTitle;
+    @Transient
     private final String role = "CANDIDATE";
 }

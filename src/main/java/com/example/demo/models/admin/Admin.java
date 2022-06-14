@@ -26,6 +26,7 @@ public class Admin implements Model {
     private String email;
     @Size(min=6, message = "Password should have at least 6 characters")
     private String password;
+    @Transient
     private final String role = "ADMIN";
 
     public Admin(String email, String password) {
