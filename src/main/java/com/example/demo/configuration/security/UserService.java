@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService implements UserDetailsService {
     @Autowired
@@ -25,33 +27,22 @@ public class UserService implements UserDetailsService {
     private CandidateRepository candidateRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String input) throws UsernameNotFoundException {
-        int colon = input.indexOf("#");
-        if (colon == -1) {
-            throw new NotFoundException("Email must include a hashtag (#) to define user's role");
-        } else {
-            String segments[] = input.split("#");
-            String role = segments[0];
-            String email = segments[1];
-            System.out.println(role);
-            System.out.println(email);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<Candidate> candidate = this.candidateRepository.findCandidateByEmail(email);
+        Optional<Recruiter> recruiter = this.recruiterRepository.findRecruiterByEmail(email);
+        Optional<Admin> admin = this.adminRepository.findAdminByEmail(email);
 
-            if (role.equals("RECRUITER")) {
-                Recruiter recruiter = this.recruiterRepository.findRecruiterByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format("Recruiter with this email: %s not found", email)));
-                UserPrincipal userPrincipal = new UserPrincipal(recruiter);
-                return userPrincipal;
-            } else if (role.equals("ADMIN")) {
-                Admin admin = this.adminRepository.findAdminByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format("Admin with this email: %s not found", email)));
-                System.out.println("id  " +  admin.getId());
-                UserPrincipal userPrincipal = new UserPrincipal(admin);
-                return userPrincipal;
-            } else if (role.equals("CANDIDATE")) {
-                Candidate admin = this.candidateRepository.findCandidateByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format("Candidate with this email: %s not found", email)));
-                UserPrincipal userPrincipal = new UserPrincipal(admin);
-                return userPrincipal;
-            } else {
-                throw new NotFoundException(String.format("The role provided (%s) doesn't exist", role));
-            }
+        if (candidate.isPresent()) {
+            UserPrincipal userPrincipal = new UserPrincipal(candidate.get());
+            return userPrincipal;
+        } else if (recruiter.isPresent()) {
+            UserPrincipal userPrincipal = new UserPrincipal(recruiter.get());
+            return userPrincipal;
+        } else if (admin.isPresent()) {
+            UserPrincipal userPrincipal = new UserPrincipal(admin.get());
+            return userPrincipal;
+        } else {
+            throw new UsernameNotFoundException(String.format("User with given email: %s not found", email));
         }
     }
 }
