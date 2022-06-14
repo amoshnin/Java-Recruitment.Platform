@@ -2,12 +2,18 @@ package com.example.demo.models.job;
 
 import com.example.demo.configuration.exceptions.GenericException;
 import com.example.demo.configuration.exceptions.NotFoundException;
+import com.example.demo.configuration.pagination.PaginationObject;
+import com.example.demo.configuration.pagination.SortObject;
 import com.example.demo.models.admin.AdminService;
 import com.example.demo.models.recruiter.RecruiterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,14 +88,39 @@ public class JobService {
         }
     }
 
-    public List<Job> getMyListAsRecruiter(Principal principal) {
-        return this.jobRepository.findAllByRecruiter_Email(principal.getName());
+    private Pageable createPager(PaginationObject paginationObject,
+                    Optional<SortObject> sortObject) {
+        Optional<Sort> sort = Optional.empty();
+        if (sortObject.isPresent()) {
+            if (sortObject.get().getDescendingSort()) {
+                sort = Optional.of(Sort.by(sortObject.get().getSortField()).descending());
+            } else {
+                sort = Optional.of(Sort.by(sortObject.get().getSortField()).ascending());
+            }
+        }
+        Pageable pager = PageRequest.of(paginationObject.getPageNumber(), paginationObject.getPageSize());
+        if (sort.isPresent()) {
+            pager = PageRequest.of(paginationObject.getPageNumber(), paginationObject.getPageSize(), sort.get());
+        }
+        return pager;
     }
 
-    public List<Job> getAllListAsAdmin(Principal principal) {
+    public List<Job> getMyListAsRecruiter(
+            Principal principal,
+            PaginationObject paginationObject,
+            Optional<SortObject> sortObject) {
+        Pageable pager = this.createPager(paginationObject, sortObject);
+        return this.jobRepository.findAllByRecruiter_Email(principal.getName(), pager);
+    }
+
+    public List<Job> getAllListAsAdmin(
+            Principal principal,
+            PaginationObject paginationObject,
+            Optional<SortObject> sortObject) {
         boolean userIsAdmin = this.adminService.isGivenUserAdmin(principal);
         if (userIsAdmin) {
-            return this.jobRepository.findAll();
+            Pageable pager = this.createPager(paginationObject, sortObject);
+            return this.jobRepository.findAll(pager).toList();
         } else {
             throw new GenericException("You must be ADMIN to view all jobs");
         }
