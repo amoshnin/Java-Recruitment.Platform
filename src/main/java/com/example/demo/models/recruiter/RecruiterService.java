@@ -3,8 +3,7 @@ package com.example.demo.models.recruiter;
 import com.example.demo.configuration.exceptions.FoundException;
 import com.example.demo.configuration.exceptions.GenericException;
 import com.example.demo.configuration.exceptions.NotFoundException;
-import com.example.demo.models.admin.AdminService;
-import com.example.demo.models.candidate.Candidate;
+import com.example.demo.models.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ public class RecruiterService {
     private RecruiterRepository recruiterRepository;
 
     @Autowired
-    private AdminService adminService;
+    private UserService userService;
 
     public boolean isGivenRecruiterPrincipal(Principal principal, Long recruiterId) {
         Optional<Recruiter> row = this.recruiterRepository.findRecruiterByEmail(principal.getName());
@@ -37,7 +36,7 @@ public class RecruiterService {
     public Recruiter getItem(Long recruiterId, Principal principal) {
         Optional<Recruiter> row = this.recruiterRepository.findById(recruiterId);
         if (row.isPresent()) {
-            boolean userIsAdmin = this.adminService.isGivenUserAdmin(principal);
+            boolean userIsAdmin = this.userService.isGivenUserAdmin(principal);
             boolean userIsRecruiter = this.isGivenRecruiterPrincipal(principal, recruiterId);
             if (userIsAdmin || userIsRecruiter) {
                 return row.get();

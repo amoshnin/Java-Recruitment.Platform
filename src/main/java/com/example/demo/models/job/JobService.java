@@ -4,8 +4,8 @@ import com.example.demo.configuration.exceptions.GenericException;
 import com.example.demo.configuration.exceptions.NotFoundException;
 import com.example.demo.configuration.pagination.PaginationObject;
 import com.example.demo.configuration.pagination.SortObject;
-import com.example.demo.models.admin.AdminService;
 import com.example.demo.models.recruiter.RecruiterService;
+import com.example.demo.models.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +22,7 @@ public class JobService {
     private JobRepository jobRepository;
 
     @Autowired
-    private AdminService adminService;
+    private UserService userService;
 
     @Autowired
     private RecruiterService recruiterService;
@@ -76,7 +75,7 @@ public class JobService {
         Optional<Job> row = this.jobRepository.findById(jobId);
         if (row.isPresent()) {
             Job job = row.get();
-            boolean userIsAdmin = this.adminService.isGivenUserAdmin(principal);
+            boolean userIsAdmin = this.userService.isGivenUserAdmin(principal);
             boolean userIsCreatorOfJob = this.recruiterService.isGivenRecruiterPrincipal(principal, job.getRecruiter().getId());
             if (userIsCreatorOfJob || userIsAdmin) {
                 return job;
@@ -117,7 +116,7 @@ public class JobService {
             Principal principal,
             PaginationObject paginationObject,
             Optional<SortObject> sortObject) {
-        boolean userIsAdmin = this.adminService.isGivenUserAdmin(principal);
+        boolean userIsAdmin = this.userService.isGivenUserAdmin(principal);
         if (userIsAdmin) {
             Pageable pager = this.createPager(paginationObject, sortObject);
             return this.jobRepository.findAll(pager).toList();

@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 @AllArgsConstructor
-public class UserPrincipal implements UserDetails {
+public class AuthUserPrincipal implements UserDetails {
     private Model user;
 
     @Override
