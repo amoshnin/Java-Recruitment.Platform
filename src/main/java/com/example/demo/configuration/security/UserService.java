@@ -42,6 +42,7 @@ public class UserService implements UserDetailsService {
                 return userPrincipal;
             } else if (role.equals("ADMIN")) {
                 Admin admin = this.adminRepository.findAdminByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format("Admin with this email: %s not found", email)));
+                System.out.println("id  " +  admin.getId());
                 UserPrincipal userPrincipal = new UserPrincipal(admin);
                 return userPrincipal;
             } else if (role.equals("CANDIDATE")) {
