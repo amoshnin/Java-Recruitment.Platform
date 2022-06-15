@@ -7,6 +7,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.transaction.Transactional;
 
@@ -21,6 +24,20 @@ public class DemoApplication {
 	public CommandLineRunner initialData(AdminRepository adminRepository) {
 		return args -> {
 			try { adminRepository.save(new Admin("test@gmail.com", new BCryptPasswordEncoder().encode("123456"))); } catch(Exception e) {}
+		};
+	}
+
+	@Bean
+	public WebMvcConfigurerAdapter corsConfigurer() {
+		return new WebMvcConfigurerAdapter() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				String urls = "";
+				CorsRegistration reg = registry.addMapping("/api/**");
+				for(String url: urls.split(",")) {
+					reg.allowedOrigins(url);
+				}
+			}
 		};
 	}
 }
