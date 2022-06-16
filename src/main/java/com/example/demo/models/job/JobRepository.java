@@ -10,4 +10,6 @@ import java.util.List;
 public interface JobRepository extends JpaRepository<Job, Long> {
     List<Job> findAllByRecruiter_Email(String email);
     List<Job> findAllByRecruiter_Email(String email, Pageable pager);
+    List<Job> findAllByRecruiter_Id(Long recruiterId, Pageable pager);
+    List<Job> findAllByRecruiter_Id(Long recruiterId);
 }

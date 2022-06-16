@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -105,11 +106,17 @@ public class JobService {
     }
 
     public List<Job> getMyListAsRecruiter(
+            Long recruiterId,
             Principal principal,
             PaginationObject paginationObject,
             Optional<SortObject> sortObject) {
         Pageable pager = this.createPager(paginationObject, sortObject);
-        return this.jobRepository.findAllByRecruiter_Email(principal.getName(), pager);
+        Long principalId = this.userService.findUserByEmail(principal.getName()).getId();
+        if (recruiterId.equals(principalId)) {
+            return this.jobRepository.findAllByRecruiter_Id(recruiterId, pager);
+        } else {
+            throw new GenericException(String.format("Your ID: %s doesn't match the ID of the recruiter whose jobs you're trying to access: %s", principalId, recruiterId));
+        }
     }
 
     public List<Job> getAllListAsAdmin(

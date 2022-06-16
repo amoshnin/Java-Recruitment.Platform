@@ -7,4 +7,5 @@ public interface Model {
     String getPassword();
     String getRole();
     List<String> getPermissions();
+    Long getId();
 }
