@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.*;
 
 @Slf4j
@@ -69,5 +70,11 @@ public class UserController {
         } else {
             throw new NotFoundException("Refresh token is missing");
         }
+    }
+
+    @Operation(summary = "Endpoint (to get list of permissions for current user)", description = "", tags = {"auth"})
+    @GetMapping(path = "permissions")
+    public List<String> getPermissions(Principal principal) {
+        return this.userService.getPrincipalData(principal).getPermissions();
     }
 }

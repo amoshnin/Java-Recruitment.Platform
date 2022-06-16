@@ -1,6 +1,7 @@
 package com.example.demo.models.candidate;
 
 import com.example.demo.models.Model;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
+import java.util.Arrays;
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,6 +33,12 @@ public class Candidate implements Model {
     private String lastName;
     private String currentTitle;
     private String desiredTitle;
+
     @Transient
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private final String role = "CANDIDATE";
+
+    @Transient
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private final List<String> permissions = Arrays.asList();
 }

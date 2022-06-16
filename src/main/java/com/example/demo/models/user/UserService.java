@@ -50,7 +50,10 @@ public class UserService {
         }
     }
 
-
+    public Model getPrincipalData(Principal principal) {
+        Model row = this.findUserByEmail(principal.getName());
+        return row;
+    }
 
     public boolean isGivenUserAdmin(Principal principal) {
         return this.adminRepository.findAdminByEmail(principal.getName()).isPresent();

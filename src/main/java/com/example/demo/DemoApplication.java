@@ -26,18 +26,4 @@ public class DemoApplication {
 			try { adminRepository.save(new Admin("test@gmail.com", new BCryptPasswordEncoder().encode("123456"))); } catch(Exception e) {}
 		};
 	}
-
-	@Bean
-	public WebMvcConfigurerAdapter corsConfigurer() {
-		return new WebMvcConfigurerAdapter() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				String urls = "";
-				CorsRegistration reg = registry.addMapping("/api/**");
-				for(String url: urls.split(",")) {
-					reg.allowedOrigins(url);
-				}
-			}
-		};
-	}
 }
