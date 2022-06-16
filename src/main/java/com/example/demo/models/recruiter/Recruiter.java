@@ -32,6 +32,7 @@ public class Recruiter implements Model {
     private String password;
     private String firstName;
     private String lastName;
+    private String agency;
 
     @Transient
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)

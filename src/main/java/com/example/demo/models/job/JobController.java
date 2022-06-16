@@ -71,7 +71,7 @@ public class JobController {
         return new PaginatedResponse(result);
     }
 
-    @Operation(summary = "Endpoint (for ADMIN to get a list of all jobs)", description = "Obligatory must specify /{sortField}/{descendingSort} to implement sorting of jobs. Optionally may specify /{offset}/{pageSize} to implement pagination of jobs", tags = {"jobs"})
+    @Operation(summary = "Endpoint (for ADMIN to get a list of all jobs sorted)", description = "Obligatory must specify /{sortField}/{descendingSort} to implement sorting of jobs. Optionally may specify /{offset}/{pageSize} to implement pagination of jobs", tags = {"jobs"})
     @GetMapping(value = { "listAll/sorted/{sortField}/{descendingSort}", "listAll/sorted/{sortField}/{descendingSort}/{offset}/{pageSize}" })
     public PaginatedResponse<List<Job>> getAllListAsAdminSorted(
             Principal principal,
