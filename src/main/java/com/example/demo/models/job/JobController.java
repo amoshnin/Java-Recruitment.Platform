@@ -3,16 +3,19 @@ package com.example.demo.models.job;
 import com.example.demo.configuration.pagination.PaginationObject;
 import com.example.demo.configuration.pagination.SortObject;
 import com.example.demo.configuration.responses.PaginatedResponse;
+import com.example.demo.models.candidate.Candidate;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.security.Principal;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @RestController
@@ -113,5 +116,13 @@ public class JobController {
                 .buildAndExpand(newJob.getId())
                 .toUri();
         return ResponseEntity.created(location).build();
+    }
+
+    @Operation(summary = "Endpoint (to retrieve translated fields of job)", description = "", tags = {"jobs"})
+    @GetMapping(path = "translation")
+    public Job getTranslatedFields(HttpServletRequest request) {
+        Locale currentLocale = request.getLocale();
+        String langCode = currentLocale.getLanguage();
+        return Job.getTranslated(langCode);
     }
 }

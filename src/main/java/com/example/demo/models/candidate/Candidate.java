@@ -41,4 +41,35 @@ public class Candidate implements Model {
     @Transient
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private final List<String> permissions = Arrays.asList();
+
+    public Candidate(String email, String password, String firstName, String lastName, String currentTitle, String desiredTitle) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.currentTitle = currentTitle;
+        this.desiredTitle = desiredTitle;
+    }
+
+    public static Candidate getTranslated(String langCode) {
+        if (langCode == "es") {
+            return new Candidate(
+                    "Correo electrónico",
+                    "Contraseña",
+                    "Nombre",
+                    "Apellido",
+                    "Título actual",
+                    "Título deseado"
+            );
+        } else {
+            return new Candidate(
+                    "Email",
+                    "Password",
+                    "First name",
+                    "Last name",
+                    "Current title",
+                    "Desired title"
+                    );
+        }
+    }
 }

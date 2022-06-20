@@ -1,6 +1,7 @@
 package com.example.demo.models.job;
 
 
+import com.example.demo.models.candidate.Candidate;
 import com.example.demo.models.recruiter.Recruiter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -58,4 +59,30 @@ public class Job {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="fk_recruiter_id", referencedColumnName="recruiter_id")
     private Recruiter recruiter;
+
+    public Job(String title, String shortcode, String code, String state, String department, String country, String countryCode, String region, String regionCode, String city, String zipCode) {
+        this.title = title;
+        this.shortcode = shortcode;
+        this.code = code;
+        this.state = state;
+        this.department = department;
+        this.country = country;
+        this.countryCode = countryCode;
+        this.region = region;
+        this.regionCode = regionCode;
+        this.city = city;
+        this.zipCode = zipCode;
+    }
+
+    public static Job getTranslated(String langCode) {
+        if (langCode == "es") {
+            return new Job(
+                 
+            );
+        } else {
+            return new Job(
+
+            );
+        }
+    }
 }

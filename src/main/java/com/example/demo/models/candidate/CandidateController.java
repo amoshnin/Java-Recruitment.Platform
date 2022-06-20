@@ -5,17 +5,23 @@ import com.example.demo.models.recruiter.Recruiter;
 import com.example.demo.models.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.security.Principal;
+import java.util.Locale;
 
 @RestController
 @RequestMapping(path = "api/candidates")
 public class CandidateController {
+    @Autowired
+    Environment environment;
+
     @Autowired
     private CandidateService candidateService;
 
@@ -42,5 +48,13 @@ public class CandidateController {
                     .toUri();
             return ResponseEntity.created(location).build();
         }
+    }
+
+    @Operation(summary = "Endpoint (to retrieve translated fields of candidate)", description = "", tags = {"candidates"})
+    @GetMapping(path = "translation")
+    public Candidate getTranslatedFields(HttpServletRequest request) {
+        Locale currentLocale = request.getLocale();
+        String langCode = currentLocale.getLanguage();
+        return Candidate.getTranslated(langCode);
     }
 }
