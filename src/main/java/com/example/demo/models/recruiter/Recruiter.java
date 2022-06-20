@@ -1,6 +1,7 @@
 package com.example.demo.models.recruiter;
 
 import com.example.demo.models.Model;
+import com.example.demo.models.candidate.Candidate;
 import com.example.demo.models.job.Job;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -47,4 +48,32 @@ public class Recruiter implements Model {
 
     @OneToMany(mappedBy="recruiter")
     private List<Job> jobs;
+
+    public Recruiter(String email, String password, String firstName, String lastName, String agency) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.agency = agency;
+    }
+
+    public static Recruiter getTranslated(String langCode) {
+        if (langCode == "es") {
+            return new Recruiter(
+               "Correo electrónico",
+                    "Contraseña",
+                    "Nombre",
+                    "Apellido",
+                    "Agencia"
+            );
+        } else {
+            return new Recruiter(
+                    "Email",
+                    "Password",
+                    "First name",
+                    "Last name",
+                    "Agency"
+            );
+        }
+    }
 }

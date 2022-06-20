@@ -13,10 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.security.Principal;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @RestController
@@ -77,5 +79,13 @@ public class RecruiterController {
                 pagination,
                 Optional.of(new SortObject(sortField, descendingSort)));
         return new PaginatedResponse(result);
+    }
+
+    @Operation(summary = "Endpoint (to retrieve translated fields of recruiter)", description = "", tags = {"recruiters"})
+    @GetMapping(path = "translation")
+    public Recruiter getTranslatedFields(HttpServletRequest request) {
+        Locale currentLocale = request.getLocale();
+        String langCode = currentLocale.getLanguage();
+        return Recruiter.getTranslated(langCode);
     }
 }

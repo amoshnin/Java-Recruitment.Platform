@@ -77,11 +77,31 @@ public class Job {
     public static Job getTranslated(String langCode) {
         if (langCode == "es") {
             return new Job(
-                 
+                    "Título",
+                    "Código corto",
+                    "Código",
+                    "Estado",
+                    "Departamento",
+                    "País",
+                    "Código de país",
+                    "Región",
+                    "Código de región",
+                    "Ciudad",
+                    "Código postal"
             );
         } else {
             return new Job(
-
+                    "Title",
+                    "Short code",
+                    "Code",
+                    "State",
+                    "Department",
+                    "Country",
+                    "Country code",
+                    "Region",
+                    "Region code",
+                    "City",
+                    "Zip code"
             );
         }
     }
