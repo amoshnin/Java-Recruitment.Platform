@@ -49,6 +49,12 @@ public class Recruiter implements Model {
     @OneToMany(mappedBy="recruiter")
     private List<Job> jobs;
 
+    public Recruiter(Long id, String email, String password) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+    }
+
     public Recruiter(String email, String password, String firstName, String lastName, String agency) {
         this.email = email;
         this.password = password;

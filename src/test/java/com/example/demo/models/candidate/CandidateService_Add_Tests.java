@@ -19,30 +19,26 @@ class CandidateService_Add_Tests {
     @MockBean
     private CandidateRepository candidateRepository;
 
-    // constants
-    Long firstCandidateId = 1L;
-    String firstCandidateEmail = "firstCandidate@gmail.com";
-    Candidate firstCandidate = new Candidate(this.firstCandidateId, this.firstCandidateEmail, "");
-
-    Long secondCandidateId = 2L;
-    String secondCandidateEmail = "firstCandidate@gmail.com";
-    Candidate secondCandidate = new Candidate(this.secondCandidateId, this.secondCandidateEmail, "");
+    // CONSTANTS
+    Long candidateId = 1L;
+    String candidateEmail = "firstCandidate@gmail.com";
+    Candidate candidate = new Candidate(this.candidateId, this.candidateEmail, "");
 
     @Test
     public void shouldCreateAndReturnNewCandidate_whenCandidateWithGivenEmailDoesNotExist() {
         // define CANDIDATE.save (main)
-        Mockito.when(this.candidateRepository.save(this.firstCandidate)).thenReturn(this.firstCandidate);
+        Mockito.when(this.candidateRepository.save(this.candidate)).thenReturn(this.candidate);
         // assert (equals)
-        assertEquals(this.firstCandidate, this.service.add(this.firstCandidate));
+        assertEquals(this.candidate, this.service.add(this.candidate));
     }
 
     @Test
     public void shouldThrowFoundException_whenCandidateWithGivenEmailDoesExist() {
         // define CANDIDATE.findCandidateByEmail
-        Mockito.when(this.candidateRepository.findCandidateByEmail(this.firstCandidateEmail)).thenReturn(Optional.of(this.firstCandidate));
+        Mockito.when(this.candidateRepository.findCandidateByEmail(this.candidateEmail)).thenReturn(Optional.of(this.candidate));
         // define CANDIDATE.save (main)
-        Mockito.when(this.candidateRepository.save(this.firstCandidate)).thenReturn(this.firstCandidate);
+        Mockito.when(this.candidateRepository.save(this.candidate)).thenReturn(this.candidate);
         // assert (throws)
-        assertThrows(FoundException.class, () -> { this.service.add(this.firstCandidate); });
+        assertThrows(FoundException.class, () -> { this.service.add(this.candidate); });
     }
 }

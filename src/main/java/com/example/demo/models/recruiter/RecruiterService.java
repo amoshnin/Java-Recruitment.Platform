@@ -27,8 +27,12 @@ public class RecruiterService {
 
     public boolean isGivenRecruiterPrincipal(Principal principal, Long recruiterId) {
         Optional<Recruiter> row = this.recruiterRepository.findRecruiterByEmail(principal.getName());
-        Recruiter recruiter = row.get();
-        return recruiter.getId() == recruiterId;
+        if (row.isPresent()) {
+            Recruiter recruiter = row.get();
+            return recruiter.getId() == recruiterId;
+        } else {
+            return false;
+        }
     }
 
     public Recruiter add(Recruiter candidate) {

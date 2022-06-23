@@ -23,7 +23,7 @@ class CandidateService_IsGivenCandidatePrincipal_Tests {
     @Mock
     private Principal principal;
 
-    // constants
+    // CONSTANTS
     String randomEmail = "random@gmail.com";
 
     Long candidateId = 1L;

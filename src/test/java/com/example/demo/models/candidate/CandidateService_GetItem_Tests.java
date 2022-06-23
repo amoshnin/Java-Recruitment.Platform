@@ -30,7 +30,7 @@ class CandidateService_GetItem_Tests {
     @Mock
     private Principal principal;
 
-    // constants
+    // CONSTANTS
     String randomEmail = "random@gmail.com";
 
     Long firstCandidateId = 1L;
@@ -56,7 +56,7 @@ class CandidateService_GetItem_Tests {
         Mockito.when(this.candidateRepository.findById(this.firstCandidateId))
                 .thenReturn(Optional.of(this.firstCandidate));
         // assert (equals)
-        assertEquals(this.firstCandidate, service.getItem(this.firstCandidateId, this.principal));
+        assertEquals(this.firstCandidate, this.service.getItem(this.firstCandidateId, this.principal));
     }
 
     @Test
@@ -69,7 +69,7 @@ class CandidateService_GetItem_Tests {
         Mockito.when(this.candidateRepository.findById(this.firstCandidateId))
                 .thenReturn(Optional.of(this.firstCandidate));
         // assert (equals)
-        assertEquals(this.firstCandidate, service.getItem(this.firstCandidateId, this.principal));
+        assertEquals(this.firstCandidate, this.service.getItem(this.firstCandidateId, this.principal));
     }
 
     @Test
