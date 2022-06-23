@@ -27,3 +27,7 @@ public class DemoApplication {
 		};
 	}
 }
+
+// In testing:
+// We're going to write test cases for our Services and Mock the data of our repositories - meaning that we do not have to create databases
+// Instead of getting the actual data from database, we'll just mock the data and return it back to our service.
