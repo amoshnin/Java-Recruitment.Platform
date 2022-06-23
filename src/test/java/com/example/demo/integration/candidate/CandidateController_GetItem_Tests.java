@@ -14,7 +14,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,7 +30,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -58,15 +56,12 @@ public class CandidateController_GetItem_Tests {
         obj.put("lastName", this.lastName);
         obj.put("email", this.email);
         obj.put("password", this.password);
-
         MockHttpServletResponse response = this.mockMvc.perform(post("/api/candidates/item")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(obj.toString()))
                 .andReturn().getResponse();
-
         assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-        assertEquals("http://localhost/api/candidates/item/1", response.getHeader("Location"));
-        // CREATED => 201
+        assertEquals("http://localhost/api/candidates/item/1", response.getHeader("Location")); // CREATED => 201
     }
 
     @Test // SUCCESS
@@ -75,29 +70,47 @@ public class CandidateController_GetItem_Tests {
         ResultActions result = this.mockMvc
                 .perform(get("/api/candidates/item/1").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
-
         MockHttpServletResponse response = result.andReturn().getResponse();
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(HttpStatus.OK.value(), response.getStatus()); // CREATED => 200
         result
                 .andExpect(jsonPath("$.firstName", is(this.firstName)))
                 .andExpect(jsonPath("$.lastName", is(this.lastName)))
                 .andExpect(jsonPath("$.email", is(this.email)));
     }
 
-    // SUCCESS
-    @Test
+    @Test // SUCCESS
     @WithMockUser(username="test@gmail.com", roles={"ADMIN"})
     void shouldGetCandidate_whenUserIsAdmin() throws Exception {
         Mockito.when(this.adminRepository.findAdminByEmail("test@gmail.com")).thenReturn(Optional.of(new Admin(3L, "test@gmail.com", "123456")));
         ResultActions result = this.mockMvc
                 .perform(get("/api/candidates/item/1").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
-
         MockHttpServletResponse response = result.andReturn().getResponse();
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(HttpStatus.OK.value(), response.getStatus()); // CREATED => 200
         result
                 .andExpect(jsonPath("$.firstName", is(this.firstName)))
                 .andExpect(jsonPath("$.lastName", is(this.lastName)))
                 .andExpect(jsonPath("$.email", is(this.email)));
+    }
+
+    @Test // FAILURE
+    @WithMockUser(username="test@gmail.com", roles={"ADMIN"})
+    void shouldReturn404_whenGivenCandidateDoesNotExist() throws Exception {
+        Mockito.when(this.adminRepository.findAdminByEmail("test@gmail.com")).thenReturn(Optional.of(new Admin(3L, "test@gmail.com", "123456")));
+        ResultActions result = this.mockMvc
+                .perform(get("/api/candidates/item/9999").contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+        MockHttpServletResponse response = result.andReturn().getResponse();
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus()); // NOT_FOUND => 404
+    }
+
+    @Test // FAILURE
+    @WithMockUser(username="random@gmail.com", roles={"CANDIDATE"})
+    void shouldReturn423_whenUserIsNeitherThatCandidateNorAdmin() throws Exception {
+        ResultActions result = this.mockMvc
+                .perform(get("/api/candidates/item/1").contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+        MockHttpServletResponse response = result.andReturn().getResponse();
+        assertEquals(HttpStatus.LOCKED.value(), response.getStatus()); // LOCKED => 423
     }
 }
