@@ -51,6 +51,12 @@ public class Candidate implements Model {
         this.desiredTitle = desiredTitle;
     }
 
+    public Candidate(Long id, String email, String password) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+    }
+
     public static Candidate getTranslated(String langCode) {
         if (langCode == "es") {
             return new Candidate(

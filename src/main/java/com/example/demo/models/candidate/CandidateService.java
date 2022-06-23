@@ -21,8 +21,12 @@ public class CandidateService {
 
     public boolean isGivenCandidatePrincipal(Principal principal, Long candidateId) {
         Optional<Candidate> row = this.candidateRepository.findCandidateByEmail(principal.getName());
-        Candidate candidate = row.get();
-        return candidate.getId() == candidateId;
+        if (row.isPresent()) {
+            Candidate candidate = row.get();
+            return candidate.getId() == candidateId;
+        } else {
+            return false;
+        }
     }
 
     public Candidate add(Candidate candidate) {
@@ -36,9 +40,9 @@ public class CandidateService {
     public Candidate getItem(Long candidateId, Principal principal) {
         Optional<Candidate> row = this.candidateRepository.findById(candidateId);
         if (row.isPresent()) {
-//            boolean userIsAdmin = this.userService.isGivenUserAdmin(principal);
+            boolean userIsAdmin = this.userService.isGivenUserAdmin(principal);
             boolean userIsCandidate = this.isGivenCandidatePrincipal(principal, candidateId);
-            if ( userIsCandidate) {
+            if (userIsAdmin | userIsCandidate) {
                 return row.get();
             } else {
                 throw new GenericException("You cannot access this resource because you are neither a candidate of whom you're trying to get details nor you are an admin");
