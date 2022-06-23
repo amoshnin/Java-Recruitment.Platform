@@ -59,27 +59,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // (future) CANDIDATE can create an account for himself (in other words, anyone can create a CANDIDATE account)
                 .antMatchers(HttpMethod.POST,"/api/candidates/item").permitAll()
                 // ADMIN can view detail of any candidate
-                .antMatchers(HttpMethod.GET,"/api/candidates/item/{candidateId}").hasRole("ADMIN")
                 // CANDIDATE can view details of himself
-                .antMatchers(HttpMethod.GET,"/api/candidates/item/{candidateId}").hasRole("CANDIDATE")
+                .antMatchers(HttpMethod.GET,"/api/candidates/item/{candidateId}").hasAnyRole("CANDIDATE", "ADMIN")
 
                 // ADMIN can create accounts for recruiters
                 .antMatchers(HttpMethod.POST,"/api/recruiters/item").hasRole("ADMIN")
                 // RECRUITER can view details of himself
-                .antMatchers(HttpMethod.GET,"/api/recruiters/item/{recruiterId}").hasRole("RECRUITER")
                 // ADMIN can view details of any recruiter
-                .antMatchers(HttpMethod.GET,"/api/recruiters/item/{recruiterId}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/api/recruiters/item/{recruiterId}").hasAnyRole("RECRUITER", "ADMIN")
 
                 // RECRUITER can create a job
                 .antMatchers(HttpMethod.POST,"/api/jobs/item").hasRole("RECRUITER")
-                // RECRUITER can update his existing job (importantly, job must already exist)
-                .antMatchers(HttpMethod.PUT,"/api/jobs/item").hasRole("RECRUITER")
                 // ADMIN can update any existing job (importantly, job must already exist)
-                .antMatchers(HttpMethod.PUT,"/api/jobs/item").hasRole("ADMIN")
-                // RECRUITER can view details of his job (importantly, only his job)
-                .antMatchers(HttpMethod.GET,"/api/jobs/item/{jobId}").hasRole("RECRUITER")
+                // RECRUITER can update his existing job (importantly, job must already exist)
+                .antMatchers(HttpMethod.PUT,"/api/jobs/item").hasAnyRole("RECRUITER", "ADMIN")
                 // ADMIN can view details of any job
-                .antMatchers(HttpMethod.GET,"/api/jobs/item/{jobId}").hasRole("ADMIN")
+                // RECRUITER can view details of his job (importantly, only his job)
+                .antMatchers(HttpMethod.GET,"/api/jobs/item/{jobId}").hasAnyRole("RECRUITER", "ADMIN")
                 // RECRUITER can list all his jobs (importantly, only his jobs)
                 .antMatchers(HttpMethod.GET,"/api/jobs/list").hasRole("RECRUITER")
                 // ... pagination

@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Arrays;
 import java.util.List;
@@ -26,13 +27,22 @@ public class Recruiter implements Model {
     @Column(name="recruiter_id")
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
-    @Email(message = "Email is not correctly formatted")
+
     @Column(unique = true)
+    @Email(message = "Email is not correctly formatted")
+    @NotBlank
     private String email;
+
     @Size(min=6, message = "Password should have at least 6 characters")
+    @NotBlank
     private String password;
+
+    @NotBlank
     private String firstName;
+
+    @NotBlank
     private String lastName;
+
     private String agency;
 
     @Transient

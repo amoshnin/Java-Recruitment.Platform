@@ -3,6 +3,7 @@ package com.example.demo.models.candidate;
 import com.example.demo.configuration.exceptions.FoundException;
 import com.example.demo.models.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -13,12 +14,15 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.net.URI;
 import java.security.Principal;
 import java.util.Locale;
 
 @RestController
 @RequestMapping(path = "api/candidates")
+@Slf4j
 public class CandidateController {
     @Autowired
     Environment environment;
@@ -37,7 +41,7 @@ public class CandidateController {
 
     @Operation(summary = "Endpoint (for anyone unauthorised to create a CANDIDATE)", description = "", tags = {"candidates"})
     @PostMapping(path = "item")
-    public ResponseEntity<Object> add(@Valid @RequestBody Candidate candidate) {
+    public ResponseEntity<Object> add(@RequestBody @Valid Candidate candidate) {
         if (this.userService.doesEmailExist(candidate.getEmail())) {
             throw new FoundException(String.format("User with given email: %s already exist", candidate.getEmail()));
         } else {

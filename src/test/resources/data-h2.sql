@@ -13,3 +13,5 @@
 --INSERT INTO model(name, type, make_id) VALUES ('Audi S4 Sedan', 'SEDAN',(SELECT id from make WHERE name = 'AUDI'))
 --INSERT INTO model(name, type, make_id) VALUES ('Audi A6 Sedan', 'SEDAN',(SELECT id from make WHERE name = 'AUDI'))
 --INSERT INTO model(name, type, make_id) VALUES ('Audi Q2', 'SUV',(SELECT id from make WHERE name = 'AUDI'))
+
+--INSERT INTO admins(id, email, passsword) VALUES (1, "test@gmail.com", "123456")
