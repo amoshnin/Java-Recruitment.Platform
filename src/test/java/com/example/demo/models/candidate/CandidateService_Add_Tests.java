@@ -34,14 +34,19 @@ class CandidateService_Add_Tests {
 
     @Test
     public void shouldCreateAndReturnNewCandidate_whenCandidateWithGivenEmailDoesNotExist() {
+        // define CANDIDATE.save (main)
         Mockito.when(this.candidateRepository.save(this.firstCandidate)).thenReturn(this.firstCandidate);
+        // assert (equals)
         assertEquals(this.firstCandidate, this.service.add(this.firstCandidate));
     }
 
     @Test
     public void shouldThrowFoundException_whenCandidateWithGivenEmailDoesExist() {
+        // define CANDIDATE.findCandidateByEmail
         Mockito.when(this.candidateRepository.findCandidateByEmail(this.firstCandidateEmail)).thenReturn(Optional.of(this.firstCandidate));
+        // define CANDIDATE.save (main)
         Mockito.when(this.candidateRepository.save(this.firstCandidate)).thenReturn(this.firstCandidate);
+        // assert (throws)
         assertThrows(FoundException.class, () -> { this.service.add(this.firstCandidate); });
     }
 }
