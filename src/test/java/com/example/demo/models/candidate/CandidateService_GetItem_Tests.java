@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class CandidateServiceTest {
+class CandidateService_GetItem_Tests {
     @Autowired
     private CandidateService service;
 
@@ -47,15 +47,6 @@ class CandidateServiceTest {
     Long adminId = 3L;
     String adminEmail = "admin@gmail.com";
 
-    @Test
-    public void isGivenCandidatePrincipal() {
-    }
-
-    @Test
-    public void add() {
-    }
-
-    // Tests for method: getItem(Long candidateId, Principal principal)
     @Test
     public void shouldReturnCandidate_whenUserIsAdmin() {
         // define principal email => admin
