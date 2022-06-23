@@ -1,6 +1,7 @@
 package com.example.demo.models.candidate;
 
 import com.example.demo.configuration.exceptions.FoundException;
+import com.example.demo.configuration.exceptions.GenericException;
 import com.example.demo.configuration.exceptions.NotFoundException;
 import com.example.demo.models.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +36,13 @@ public class CandidateService {
     public Candidate getItem(Long candidateId, Principal principal) {
         Optional<Candidate> row = this.candidateRepository.findById(candidateId);
         if (row.isPresent()) {
-            boolean usedIsAdmin = this.userService.isGivenUserAdmin(principal);
-            boolean userIsRecruiter = this.isGivenCandidatePrincipal(principal, candidateId);
-            return row.get();
+//            boolean userIsAdmin = this.userService.isGivenUserAdmin(principal);
+            boolean userIsCandidate = this.isGivenCandidatePrincipal(principal, candidateId);
+            if ( userIsCandidate) {
+                return row.get();
+            } else {
+                throw new GenericException("You cannot access this resource because you are neither a candidate of whom you're trying to get details nor you are an admin");
+            }
         } else {
             throw new NotFoundException(String.format("Candidate with ID: %s doesn't exist", candidateId));
         }
