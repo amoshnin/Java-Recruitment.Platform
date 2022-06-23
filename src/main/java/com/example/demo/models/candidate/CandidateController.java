@@ -1,13 +1,14 @@
 package com.example.demo.models.candidate;
 
 import com.example.demo.configuration.exceptions.FoundException;
-import com.example.demo.models.recruiter.Recruiter;
 import com.example.demo.models.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
