@@ -77,6 +77,9 @@ public class RecruiterService_GetAllListAsAdmin_Tests {
             assertEquals(this.recruiters.get(i).getId(), this.service.getAllListAsAdmin(this.principal, this.pagination, Optional.empty()).get(i).getId());
             assertEquals(this.recruiters.get(i).getEmail(), this.service.getAllListAsAdmin(this.principal, this.pagination, Optional.empty()).get(i).getEmail());
             assertEquals(this.recruiters.get(i).getPassword(), this.service.getAllListAsAdmin(this.principal, this.pagination, Optional.empty()).get(i).getPassword());
+            if (i > 0) {
+                assertNotEquals(this.recruiters.get(i-1).getEmail(), this.service.getAllListAsAdmin(this.principal, this.pagination, Optional.empty()).get(i).getEmail());
+            }
         }
     }
 }

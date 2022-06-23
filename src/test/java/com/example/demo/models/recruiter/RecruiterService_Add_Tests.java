@@ -21,12 +21,12 @@ public class RecruiterService_Add_Tests {
 
     // CONSTANTS
     Long recruiterId = 1L;
-    String recruiterEmail = "firstCandidate@gmail.com";
+    String recruiterEmail = "recruiter@gmail.com";
     Recruiter recruiter = new Recruiter(this.recruiterId, this.recruiterEmail, "");
 
     @Test
     public void shouldCreateAndReturnRecruiter_whenRecruiterWithGivenEmailDoesNotExist() {
-        // define CANDIDATE.save (main)
+        // define RECRUITER.save (main)
         Mockito.when(this.recruiterRepository.save(this.recruiter)).thenReturn(this.recruiter);
         // assert (equals)
         assertEquals(this.recruiter, this.service.add(this.recruiter));
@@ -34,9 +34,9 @@ public class RecruiterService_Add_Tests {
 
     @Test
     public void shouldThrowFoundException_whenRecruiterWithGivenEmailDoesExist() {
-        // define CANDIDATE.findCandidateByEmail
+        // define RECRUITER.findCandidateByEmail
         Mockito.when(this.recruiterRepository.findRecruiterByEmail(this.recruiterEmail)).thenReturn(Optional.of(this.recruiter));
-        // define CANDIDATE.save (main)
+        // define RECRUITER.save (main)
         Mockito.when(this.recruiterRepository.save(this.recruiter)).thenReturn(this.recruiter);
         // assert (throws)
         assertThrows(FoundException.class, () -> { this.service.add(this.recruiter); });

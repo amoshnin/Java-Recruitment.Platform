@@ -36,11 +36,11 @@ public class RecruiterService_GetItem_Tests {
     String randomEmail = "random@gmail.com";
 
     Long firstRecruiterId = 1L;
-    String firstRecruiterEmail = "firstCandidate@gmail.com";
+    String firstRecruiterEmail = "firstRecruiter@gmail.com";
     Recruiter firstRecruiter = new Recruiter(this.firstRecruiterId, this.firstRecruiterEmail, "");
 
     Long secondRecruiterId = 2L;
-    String secondRecruiterEmail = "firstCandidate@gmail.com";
+    String secondRecruiterEmail = "firstRecruiter@gmail.com";
     Recruiter secondRecruiter = new Recruiter(this.secondRecruiterId, this.secondRecruiterEmail, "");
 
     Long adminId = 3L;
@@ -54,7 +54,7 @@ public class RecruiterService_GetItem_Tests {
         Mockito.when(this.adminRepository.findAdminByEmail(this.adminEmail)).thenReturn(Optional.of(
                 new Admin(this.adminId, this.adminEmail, "")
         ));
-        // define CANDIDATE.findById (main)
+        // define RECRUITER.findById (main)
         Mockito.when(this.recruiterRepository.findById(this.firstRecruiterId))
                 .thenReturn(Optional.of(this.firstRecruiter));
         // assert (equals)
@@ -65,9 +65,9 @@ public class RecruiterService_GetItem_Tests {
     public void shouldReturnRecruiter_whenUserIsThatRecruiter() {
         // define principal email => firstCandidate
         Mockito.when(this.principal.getName()).thenReturn(this.firstRecruiterEmail);
-        // define CANDIDATE.findCandidateByEmail
+        // define RECRUITER.findCandidateByEmail
         Mockito.when(this.recruiterRepository.findRecruiterByEmail(this.firstRecruiterEmail)).thenReturn(Optional.of(this.firstRecruiter));
-        // define CANDIDATE.findById (main)
+        // define RECRUITER.findById (main)
         Mockito.when(this.recruiterRepository.findById(this.firstRecruiterId))
                 .thenReturn(Optional.of(this.firstRecruiter));
         // assert (equals)
@@ -78,7 +78,7 @@ public class RecruiterService_GetItem_Tests {
     public void shouldThrowGenericException_whenUserIsNeitherAdminNorThatRecruiter() {
         // define principal email => random
         Mockito.when(this.principal.getName()).thenReturn(this.randomEmail);
-        // define CANDIDATE.findById (main)
+        // define RECRUITER.findById (main)
         Mockito.when(this.recruiterRepository.findById(this.firstRecruiterId)).thenReturn(Optional.of(this.firstRecruiter));
         // assert (throws)
         assertThrows(GenericException.class, () -> { this.service.getItem(this.firstRecruiterId, this.principal); });
@@ -86,7 +86,7 @@ public class RecruiterService_GetItem_Tests {
 
     @Test
     public void shouldThrowNotFoundException_whenRecruiterWithGivenIdDoesNotExist() {
-        // define CANDIDATE.findById (main)
+        // define RECRUITER.findById (main)
         Mockito.when(this.recruiterRepository.findById(this.firstRecruiterId))
                 .thenReturn(Optional.of(this.firstRecruiter));
         // assert (throws)
