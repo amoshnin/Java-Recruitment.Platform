@@ -26,6 +26,7 @@ public class RecruiterService {
     private UserService userService;
 
     public boolean isGivenRecruiterPrincipal(Principal principal, Long recruiterId) {
+        System.out.println();
         Optional<Recruiter> row = this.recruiterRepository.findRecruiterByEmail(principal.getName());
         if (row.isPresent()) {
             Recruiter recruiter = row.get();
@@ -35,15 +36,21 @@ public class RecruiterService {
         }
     }
 
-    public Recruiter add(Recruiter candidate) {
-        if (this.recruiterRepository.findRecruiterByEmail(candidate.getEmail()).isPresent()) {
-            throw new FoundException(String.format("Recruiter with email: '%s' already exists. Emails must be unique.", candidate.getEmail()));
+    public Recruiter getItemByEmail(Principal principal) {
+        Optional<Recruiter> row = this.recruiterRepository.findRecruiterByEmail(principal.getName());
+        if (row.isPresent()) {
+            return row.get();
+        } else {
+            throw new NotFoundException(String.format("Recruiter with email: %s doesn't exist", principal.getName()));
         }
+    }
+
+    public Recruiter add(Recruiter candidate) {
         candidate.setPassword(new BCryptPasswordEncoder().encode(candidate.getPassword()));
         return this.recruiterRepository.save(candidate);
     }
 
-    public Recruiter getItem(Long recruiterId, Principal principal) {
+    public Recruiter getItemById(Long recruiterId, Principal principal) {
         Optional<Recruiter> row = this.recruiterRepository.findById(recruiterId);
         if (row.isPresent()) {
             boolean userIsAdmin = this.userService.isGivenUserAdmin(principal);

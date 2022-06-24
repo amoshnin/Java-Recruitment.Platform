@@ -115,7 +115,7 @@ public class CandidateController_Add_Tests {
     }
 
     @Test // FAILURE
-    void shouldReturn400_whenFirstNameIsBlank() throws Exception {
+    void shouldReturn400_whenFirstNameFieldIsBlank() throws Exception {
         JSONObject obj = new JSONObject();
         obj.put("lastName", this.lastName);
         obj.put("email", this.email);
@@ -127,7 +127,7 @@ public class CandidateController_Add_Tests {
     }
 
     @Test // FAILURE
-    void shouldReturn400_whenLastNameIsBlank() throws Exception {
+    void shouldReturn400_whenLastNameFieldIsBlank() throws Exception {
         JSONObject obj = new JSONObject();
         obj.put("firstName", this.firstName);
         obj.put("email", this.email);
@@ -139,7 +139,7 @@ public class CandidateController_Add_Tests {
     }
 
     @Test // FAILURE
-    void shouldReturn400_whenEmailIsBlank() throws Exception {
+    void shouldReturn400_whenEmailFieldIsBlank() throws Exception {
         JSONObject obj = new JSONObject();
         obj.put("firstName", this.firstName);
         obj.put("lastName", this.lastName);
@@ -151,7 +151,7 @@ public class CandidateController_Add_Tests {
     }
 
     @Test // FAILURE
-    void shouldReturn400_whenPasswordIsBlank() throws Exception {
+    void shouldReturn400_whenPasswordFieldIsBlank() throws Exception {
         JSONObject obj = new JSONObject();
         obj.put("firstName", this.firstName);
         obj.put("lastName", this.lastName);

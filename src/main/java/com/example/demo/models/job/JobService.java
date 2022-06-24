@@ -4,6 +4,7 @@ import com.example.demo.configuration.exceptions.GenericException;
 import com.example.demo.configuration.exceptions.NotFoundException;
 import com.example.demo.configuration.pagination.PaginationObject;
 import com.example.demo.configuration.pagination.SortObject;
+import com.example.demo.models.recruiter.Recruiter;
 import com.example.demo.models.recruiter.RecruiterService;
 import com.example.demo.models.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,44 +29,48 @@ public class JobService {
     @Autowired
     private RecruiterService recruiterService;
 
-    public Job add(Job job) {
+    public Job add(Job job, Principal principal) {
+        Recruiter recruiter = this.recruiterService.getItemByEmail(principal);
+        job.setRecruiter(recruiter);
         return this.jobRepository.save(job);
     }
 
     public Job update(Job job, Principal principal) {
+        System.out.println(job.getId());
         // method below will verify whether principal is (admin / creator of job)
         Job item = this.getItem(job.getId(), principal);
+
         if (!job.getTitle().isEmpty()) {
             item.setTitle(job.getTitle());
         }
-        if (!job.getShortcode().isEmpty()) {
+        if (job.getShortcode() != null && !job.getShortcode().isEmpty()) {
             item.setShortcode(job.getShortcode());
         }
-        if (!job.getCode().isEmpty()) {
+        if (job.getCode() != null && !job.getCode().isEmpty()) {
             item.setCode(job.getCode());
         }
-        if (!job.getState().isEmpty()) {
+        if (job.getState() != null && !job.getState().isEmpty()) {
             item.setState(job.getState());
         }
-        if (!job.getDepartment().isEmpty()) {
+        if (job.getDepartment() != null && !job.getDepartment().isEmpty()) {
             item.setDepartment(job.getDepartment());
         }
-        if (!job.getCountry().isEmpty()) {
+        if (job.getCountry() != null && !job.getCountry().isEmpty()) {
             item.setCountry(job.getCountry());
         }
-        if (!job.getCountryCode().isEmpty()) {
+        if (job.getCountryCode() != null && !job.getCountryCode().isEmpty()) {
             item.setCountryCode(job.getCountryCode());
         }
-        if (!job.getRegion().isEmpty()) {
+        if (job.getRegion() != null && !job.getRegion().isEmpty()) {
             item.setRegion(job.getRegion());
         }
-        if (!job.getRegionCode().isEmpty()) {
+        if (job.getRegionCode() != null && !job.getRegionCode().isEmpty()) {
             item.setRegionCode(job.getRegionCode());
         }
-        if (!job.getCity().isEmpty()) {
+        if (job.getCity() != null && !job.getCity().isEmpty()) {
             item.setCity(job.getCity());
         }
-        if (!job.getZipCode().isEmpty()) {
+        if (job.getZipCode() != null && !job.getZipCode().isEmpty()) {
             item.setZipCode(job.getZipCode());
         }
 
@@ -73,12 +78,15 @@ public class JobService {
     }
 
     public Job getItem(Long jobId, Principal principal) {
+        System.out.println("jobid get " + jobId);
+        System.out.println("princ get " + principal.getName());
         Optional<Job> row = this.jobRepository.findById(jobId);
+        System.out.println("present: " + row.isPresent());
         if (row.isPresent()) {
             Job job = row.get();
             boolean userIsAdmin = this.userService.isGivenUserAdmin(principal);
             boolean userIsCreatorOfJob = this.recruiterService.isGivenRecruiterPrincipal(principal, job.getRecruiter().getId());
-            if (userIsCreatorOfJob || userIsAdmin) {
+            if (userIsAdmin) {
                 return job;
             } else {
                 throw new GenericException(String.format("You must be ADMIN or owner of the job with ID: %s to view details of it", job.getId()));

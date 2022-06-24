@@ -4,7 +4,6 @@ import com.example.demo.configuration.exceptions.GenericException;
 import com.example.demo.configuration.exceptions.NotFoundException;
 import com.example.demo.models.admin.Admin;
 import com.example.demo.models.admin.AdminRepository;
-import com.example.demo.models.candidate.Candidate;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -58,7 +57,7 @@ public class RecruiterService_GetItem_Tests {
         Mockito.when(this.recruiterRepository.findById(this.firstRecruiterId))
                 .thenReturn(Optional.of(this.firstRecruiter));
         // assert (equals)
-        assertEquals(this.firstRecruiter, this.service.getItem(this.firstRecruiterId, this.principal));
+        assertEquals(this.firstRecruiter, this.service.getItemById(this.firstRecruiterId, this.principal));
     }
 
     @Test
@@ -71,7 +70,7 @@ public class RecruiterService_GetItem_Tests {
         Mockito.when(this.recruiterRepository.findById(this.firstRecruiterId))
                 .thenReturn(Optional.of(this.firstRecruiter));
         // assert (equals)
-        assertEquals(this.firstRecruiter, this.service.getItem(this.firstRecruiterId, this.principal));
+        assertEquals(this.firstRecruiter, this.service.getItemById(this.firstRecruiterId, this.principal));
     }
 
     @Test
@@ -81,7 +80,7 @@ public class RecruiterService_GetItem_Tests {
         // define RECRUITER.findById (main)
         Mockito.when(this.recruiterRepository.findById(this.firstRecruiterId)).thenReturn(Optional.of(this.firstRecruiter));
         // assert (throws)
-        assertThrows(GenericException.class, () -> { this.service.getItem(this.firstRecruiterId, this.principal); });
+        assertThrows(GenericException.class, () -> { this.service.getItemById(this.firstRecruiterId, this.principal); });
     }
 
     @Test
@@ -90,6 +89,6 @@ public class RecruiterService_GetItem_Tests {
         Mockito.when(this.recruiterRepository.findById(this.firstRecruiterId))
                 .thenReturn(Optional.of(this.firstRecruiter));
         // assert (throws)
-        assertThrows(NotFoundException.class, () -> { this.service.getItem(this.secondRecruiterId, this.principal); });
+        assertThrows(NotFoundException.class, () -> { this.service.getItemById(this.secondRecruiterId, this.principal); });
     }
 }

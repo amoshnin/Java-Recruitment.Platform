@@ -4,8 +4,6 @@ import com.example.demo.configuration.exceptions.FoundException;
 import com.example.demo.configuration.pagination.PaginationObject;
 import com.example.demo.configuration.pagination.SortObject;
 import com.example.demo.configuration.responses.PaginatedResponse;
-import com.example.demo.models.candidate.Candidate;
-import com.example.demo.models.job.Job;
 import com.example.demo.models.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +47,7 @@ public class RecruiterController {
     @Operation(summary = "Endpoint (for ADMIN to view details of any recruiter) OR (for RECRUITER to view details of himself)", description = "", tags = {"recruiters"})
     @GetMapping(path = "item/{recruiterId}")
     public Recruiter getItem(@RequestBody Long recruiterId, Principal principal) {
-        return this.recruiterService.getItem(recruiterId, principal);
+        return this.recruiterService.getItemById(recruiterId, principal);
     }
 
     @Operation(summary = "Endpoint (for ADMIN to view list of all recruiters)", description = "Optionally may specify /{offset}/{pageSize} to implement pagination of recruiters", tags = {"recruiters"})

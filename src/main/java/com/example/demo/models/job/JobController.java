@@ -6,6 +6,8 @@ import com.example.demo.configuration.responses.PaginatedResponse;
 import com.example.demo.models.candidate.Candidate;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -96,8 +98,8 @@ public class JobController {
 
     @Operation(summary = "Endpoint (for RECRUITER to create a new job)", description = "", tags = {"jobs"})
     @PostMapping(path = "item")
-    public ResponseEntity<Object> add(@Valid @RequestBody Job job) {
-        Job newJob = this.jobService.add(job);
+    public ResponseEntity<Object> add(@Valid @RequestBody Job job, Principal principal) {
+        Job newJob = this.jobService.add(job, principal);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{jobId}")
@@ -110,12 +112,12 @@ public class JobController {
     @PutMapping(path = "item")
     public ResponseEntity<Object> update(@Valid @RequestBody Job job, Principal principal) {
         Job newJob = this.jobService.update(job, principal);
-        URI location = ServletUriComponentsBuilder
+        String location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{jobId}")
                 .buildAndExpand(newJob.getId())
-                .toUri();
-        return ResponseEntity.created(location).build();
+                .toUriString();
+        return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.LOCATION, location).build();
     }
 
     @Operation(summary = "Endpoint (to retrieve translated fields of job)", description = "", tags = {"jobs"})
