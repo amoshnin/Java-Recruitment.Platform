@@ -18,6 +18,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import java.net.URI;
 import java.security.Principal;
+import java.util.List;
 import java.util.Locale;
 
 @RestController
@@ -37,6 +38,12 @@ public class CandidateController {
     @GetMapping(path = "item/{candidateId}")
     public Candidate getItem(@PathVariable Long candidateId, Principal principal) {
         return this.candidateService.getItem(candidateId, principal);
+    }
+
+    @Operation(summary = "Endpoint (for ADMIN to view list of all candidates)", description = "", tags = {"candidates"})
+    @GetMapping(path = "list")
+    public List<Candidate> getListAsAdmin() {
+        return this.candidateService.getList();
     }
 
     @Operation(summary = "Endpoint (for anyone unauthorised to create a CANDIDATE)", description = "", tags = {"candidates"})
