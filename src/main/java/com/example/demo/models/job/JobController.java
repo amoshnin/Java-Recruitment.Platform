@@ -6,6 +6,7 @@ import com.example.demo.configuration.responses.PaginatedResponse;
 import com.example.demo.models.candidate.Candidate;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,37 +34,33 @@ public class JobController {
     }
 
     @Operation(summary = "Endpoint (for RECRUITER to get a list of his jobs)", description = "Optionally may specify /{offset}/{pageSize} to implement pagination of jobs", tags = {"jobs"})
-    @GetMapping(value = { "list", "list/{recruiterId}/{offset}/{pageSize}" })
+    @GetMapping(value = { "list", "list/{offset}/{pageSize}" })
     public PaginatedResponse<List<Job>> getMyListAsRecruiter(
             Principal principal,
-            @PathVariable(required = true) Long recruiterId,
             @PathVariable(required = false) Optional<Integer> offset,
             @PathVariable(required = false) Optional<Integer> pageSize) {
         PaginationObject pagination = new PaginationObject(offset, pageSize);
-        List<Job> result = this.jobService.getMyListAsRecruiter(
-                recruiterId,
+        Page<Job> page = this.jobService.getMyListAsRecruiter(
                 principal,
                 pagination,
                 Optional.empty());
-        return new PaginatedResponse(result);
+        return new PaginatedResponse(page);
     }
 
     @Operation(summary = "Endpoint (for RECRUITER to get a list of his jobs)", description = "Obligatory must specify /{sortField}/{descendingSort} to implement sorting of jobs. Optionally may specify /{offset}/{pageSize} to implement pagination of jobs", tags = {"jobs"})
-    @GetMapping(value = { "list/sorted/{recruiterId}/{sortField}/{descendingSort}", "list/sorted/{recruiterId}/{sortField}/{descendingSort}/{offset}/{pageSize}" })
+    @GetMapping(value = { "list/sorted/{sortField}/{descendingSort}", "list/sorted/{sortField}/{descendingSort}/{offset}/{pageSize}" })
     public PaginatedResponse<List<Job>> getMyListAsRecruiterSorted(
             Principal principal,
-            @PathVariable(required = true) Long recruiterId,
             @PathVariable(required = true) String sortField,
             @PathVariable(required = true) Boolean descendingSort,
             @PathVariable(required = false) Optional<Integer> offset,
             @PathVariable(required = false) Optional<Integer> pageSize) {
         PaginationObject pagination = new PaginationObject(offset, pageSize);
-        List<Job> result = this.jobService.getMyListAsRecruiter(
-                recruiterId,
+        Page<Job> page = this.jobService.getMyListAsRecruiter(
                 principal,
                 pagination,
                 Optional.of(new SortObject(sortField, descendingSort)));
-        return new PaginatedResponse(result);
+        return new PaginatedResponse(page);
     }
 
     @Operation(summary = "Endpoint (for ADMIN to get a list of all jobs)", description = "Optionally may specify /{offset}/{pageSize} to implement pagination of jobs", tags = {"jobs"})
@@ -73,11 +70,11 @@ public class JobController {
             @PathVariable(required = false) Optional<Integer> offset,
             @PathVariable(required = false) Optional<Integer> pageSize) {
         PaginationObject pagination = new PaginationObject(offset, pageSize);
-        List<Job> result = this.jobService.getAllListAsAdmin(
+        Page<Job> page = this.jobService.getAllListAsAdmin(
                 principal,
                 pagination,
                 Optional.empty());
-        return new PaginatedResponse(result);
+        return new PaginatedResponse(page);
     }
 
     @Operation(summary = "Endpoint (for ADMIN to get a list of all jobs sorted)", description = "Obligatory must specify /{sortField}/{descendingSort} to implement sorting of jobs. Optionally may specify /{offset}/{pageSize} to implement pagination of jobs", tags = {"jobs"})
@@ -89,11 +86,11 @@ public class JobController {
             @PathVariable(required = false) Optional<Integer> offset,
             @PathVariable(required = false) Optional<Integer> pageSize) {
         PaginationObject pagination = new PaginationObject(offset, pageSize);
-        List<Job> result = this.jobService.getAllListAsAdmin(
+        Page<Job> page = this.jobService.getAllListAsAdmin(
                 principal,
                 pagination,
                 Optional.of(new SortObject(sortField, descendingSort)));
-        return new PaginatedResponse(result);
+        return new PaginatedResponse(page);
     }
 
     @Operation(summary = "Endpoint (for RECRUITER to create a new job)", description = "", tags = {"jobs"})

@@ -7,6 +7,7 @@ import com.example.demo.configuration.responses.PaginatedResponse;
 import com.example.demo.models.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -56,11 +57,11 @@ public class RecruiterController {
                                                          @PathVariable(required = false) Optional<Integer> offset,
                                                          @PathVariable(required = false) Optional<Integer> pageSize) {
         PaginationObject pagination = new PaginationObject(offset, pageSize);
-        List<Recruiter> result = this.recruiterService.getAllListAsAdmin(
+        Page<Recruiter> page = this.recruiterService.getAllListAsAdmin(
                 principal,
                 pagination,
                 Optional.empty());
-        return new PaginatedResponse(result);
+        return new PaginatedResponse(page);
     }
 
     @Operation(summary = "Endpoint (for ADMIN to get a list of all recruiters sorted)", description = "Obligatory must specify /{sortField}/{descendingSort} to implement sorting of recruiters. Optionally may specify /{offset}/{pageSize} to implement pagination of recruiters", tags = {"recruiters"})
@@ -72,11 +73,11 @@ public class RecruiterController {
             @PathVariable(required = false) Optional<Integer> offset,
             @PathVariable(required = false) Optional<Integer> pageSize) {
         PaginationObject pagination = new PaginationObject(offset, pageSize);
-        List<Recruiter> result = this.recruiterService.getAllListAsAdmin(
+        Page<Recruiter> page = this.recruiterService.getAllListAsAdmin(
                 principal,
                 pagination,
                 Optional.of(new SortObject(sortField, descendingSort)));
-        return new PaginatedResponse(result);
+        return new PaginatedResponse(page);
     }
 
     @Operation(summary = "Endpoint (to retrieve translated fields of recruiter)", description = "", tags = {"recruiters"})

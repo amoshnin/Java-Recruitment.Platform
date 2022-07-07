@@ -7,6 +7,7 @@ import com.example.demo.configuration.pagination.PaginationObject;
 import com.example.demo.configuration.pagination.SortObject;
 import com.example.demo.models.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -83,13 +84,13 @@ public class RecruiterService {
     }
 
 
-    public List<Recruiter> getAllListAsAdmin(Principal principal,
+    public Page<Recruiter> getAllListAsAdmin(Principal principal,
                                              PaginationObject paginationObject,
                                              Optional<SortObject> sortObject) {
         boolean userIsAdmin = this.userService.isGivenUserAdmin(principal);
         if (userIsAdmin) {
             Pageable pager = this.createPager(paginationObject, sortObject);
-            return this.recruiterRepository.findAll(pager).toList();
+            return this.recruiterRepository.findAll(pager);
         } else {
             throw new GenericException("You must be ADMIN to view all jobs");
         }

@@ -72,13 +72,13 @@ public class RecruiterService_GetAllListAsAdmin_Tests {
         // define RECRUITER.findAll (main)
         Mockito.when(this.recruiterRepository.findAll(org.mockito.ArgumentMatchers.isA(Pageable.class))).thenReturn(this.pagedRecruiters);
         // assert (equals)
-        assertEquals(this.recruiters.size(), this.service.getAllListAsAdmin(this.principal, this.pagination, Optional.empty()).size());
+        assertEquals(this.recruiters.size(), this.service.getAllListAsAdmin(this.principal, this.pagination, Optional.empty()).getContent().size());
         for (int i = 0; i < this.recruiters.size(); i++) {
-            assertEquals(this.recruiters.get(i).getId(), this.service.getAllListAsAdmin(this.principal, this.pagination, Optional.empty()).get(i).getId());
-            assertEquals(this.recruiters.get(i).getEmail(), this.service.getAllListAsAdmin(this.principal, this.pagination, Optional.empty()).get(i).getEmail());
-            assertEquals(this.recruiters.get(i).getPassword(), this.service.getAllListAsAdmin(this.principal, this.pagination, Optional.empty()).get(i).getPassword());
+            assertEquals(this.recruiters.get(i).getId(), this.service.getAllListAsAdmin(this.principal, this.pagination, Optional.empty()).getContent().get(i).getId());
+            assertEquals(this.recruiters.get(i).getEmail(), this.service.getAllListAsAdmin(this.principal, this.pagination, Optional.empty()).getContent().get(i).getEmail());
+            assertEquals(this.recruiters.get(i).getPassword(), this.service.getAllListAsAdmin(this.principal, this.pagination, Optional.empty()).getContent().get(i).getPassword());
             if (i > 0) {
-                assertNotEquals(this.recruiters.get(i-1).getEmail(), this.service.getAllListAsAdmin(this.principal, this.pagination, Optional.empty()).get(i).getEmail());
+                assertNotEquals(this.recruiters.get(i-1).getEmail(), this.service.getAllListAsAdmin(this.principal, this.pagination, Optional.empty()).getContent().get(i).getEmail());
             }
         }
     }

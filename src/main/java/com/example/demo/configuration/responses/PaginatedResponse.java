@@ -1,13 +1,17 @@
 package com.example.demo.configuration.responses;
 
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 
-public class PaginatedResponse<T extends List> {
+public class PaginatedResponse<T> {
     public int recordCount;
-    public T response;
+    public int totalNumberOfPages;
+    public List<T> response;
 
-    public PaginatedResponse(T input) {
-        this.recordCount = input.size();
-        this.response = input;
+    public PaginatedResponse(Page<T> page) {
+        this.totalNumberOfPages = page.getTotalPages();
+        this.recordCount = page.getNumberOfElements();
+        this.response = page.getContent();
     }
 }

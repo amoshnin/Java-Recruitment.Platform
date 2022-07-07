@@ -8,6 +8,7 @@ import com.example.demo.models.recruiter.Recruiter;
 import com.example.demo.models.recruiter.RecruiterService;
 import com.example.demo.models.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -113,28 +114,28 @@ public class JobService {
         return pager;
     }
 
-    public List<Job> getMyListAsRecruiter(
-            Long recruiterId,
+    public Page<Job> getMyListAsRecruiter(
             Principal principal,
             PaginationObject paginationObject,
             Optional<SortObject> sortObject) {
         Pageable pager = this.createPager(paginationObject, sortObject);
+        System.out.println(pager.getPageNumber());
+        System.out.println( pager.getPageSize());
+        System.out.println(pager.getOffset());
         Long principalId = this.userService.findUserByEmail(principal.getName()).getId();
-        if (recruiterId.equals(principalId)) {
-            return this.jobRepository.findAllByRecruiter_Id(recruiterId, pager);
-        } else {
-            throw new GenericException(String.format("Your ID: %s doesn't match the ID of the recruiter whose jobs you're trying to access: %s", principalId, recruiterId));
-        }
+        Page<Job> page = this.jobRepository.findAllByRecruiter_Id(principalId, pager);
+        return page;
     }
 
-    public List<Job> getAllListAsAdmin(
+    public Page<Job> getAllListAsAdmin(
             Principal principal,
             PaginationObject paginationObject,
             Optional<SortObject> sortObject) {
         boolean userIsAdmin = this.userService.isGivenUserAdmin(principal);
         if (userIsAdmin) {
             Pageable pager = this.createPager(paginationObject, sortObject);
-            return this.jobRepository.findAll(pager).toList();
+            Page<Job> page = this.jobRepository.findAll(pager);
+            return page;
         } else {
             throw new GenericException("You must be ADMIN to view all jobs");
         }
