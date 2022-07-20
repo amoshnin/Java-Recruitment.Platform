@@ -52,7 +52,7 @@ public class RecruiterController {
     }
 
     @Operation(summary = "Endpoint (for ADMIN to view list of all recruiters)", description = "Optionally may specify /{offset}/{pageSize} to implement pagination of recruiters", tags = {"recruiters"})
-    @GetMapping(path = "listAll")
+    @GetMapping(path = "listAll/{offset}/{pageSize}")
     public PaginatedResponse<List<Recruiter>> getAllListAsAdmin(Principal principal,
                                                          @PathVariable(required = false) Optional<Integer> offset,
                                                          @PathVariable(required = false) Optional<Integer> pageSize) {

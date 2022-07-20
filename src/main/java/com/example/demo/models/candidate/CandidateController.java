@@ -1,11 +1,16 @@
 package com.example.demo.models.candidate;
 
 import com.example.demo.configuration.exceptions.FoundException;
+import com.example.demo.configuration.pagination.PaginationObject;
+import com.example.demo.configuration.pagination.SortObject;
+import com.example.demo.configuration.responses.PaginatedResponse;
+import com.example.demo.models.recruiter.Recruiter;
 import com.example.demo.models.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +25,7 @@ import java.net.URI;
 import java.security.Principal;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/candidates")
@@ -41,9 +47,29 @@ public class CandidateController {
     }
 
     @Operation(summary = "Endpoint (for ADMIN to view list of all candidates)", description = "", tags = {"candidates"})
-    @GetMapping(path = "list")
-    public List<Candidate> getListAsAdmin() {
-        return this.candidateService.getList();
+    @GetMapping(value = {"list", "list/{offset}/{pageSize}"})
+    public PaginatedResponse<Candidate> getListAsAdmin(Principal principal,
+                                            @PathVariable(required = false) Optional<Integer> offset,
+                                          @PathVariable(required = false) Optional<Integer> pageSize) {
+        PaginationObject pagination = new PaginationObject(offset, pageSize);
+        Page<Candidate> page = this.candidateService.getList(principal, pagination, Optional.empty());
+        return new PaginatedResponse(page);
+    }
+
+    @Operation(summary = "Endpoint (for ADMIN to view list of all candidates)", description = "", tags = {"candidates"})
+    @GetMapping(value = {"list/sorted/{sortField}/{descendingSort}", "list/sorted/{sortField}/{descendingSort}/{offset}/{pageSize}"})
+    public PaginatedResponse<Candidate> getListAsAdminSorted(
+            Principal principal,
+            @PathVariable(required = true) String sortField,
+            @PathVariable(required = true) Boolean descendingSort,
+            @PathVariable(required = false) Optional<Integer> offset,
+            @PathVariable(required = false) Optional<Integer> pageSize) {
+        PaginationObject pagination = new PaginationObject(offset, pageSize);
+        Page<Candidate> page = this.candidateService.getList(
+                principal,
+                pagination,
+                Optional.of(new SortObject(sortField, descendingSort)));
+        return new PaginatedResponse(page);
     }
 
     @Operation(summary = "Endpoint (for anyone unauthorised to create a CANDIDATE)", description = "", tags = {"candidates"})

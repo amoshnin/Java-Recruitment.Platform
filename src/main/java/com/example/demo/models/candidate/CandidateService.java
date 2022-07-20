@@ -3,8 +3,14 @@ package com.example.demo.models.candidate;
 import com.example.demo.configuration.exceptions.FoundException;
 import com.example.demo.configuration.exceptions.GenericException;
 import com.example.demo.configuration.exceptions.NotFoundException;
+import com.example.demo.configuration.pagination.PaginationObject;
+import com.example.demo.configuration.pagination.SortObject;
 import com.example.demo.models.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +35,31 @@ public class CandidateService {
             return false;
         }
     }
+    private Pageable createPager(PaginationObject paginationObject,
+                                 Optional<SortObject> sortObject) {
+        Optional<Sort> sort = Optional.empty();
+        if (sortObject.isPresent()) {
+            if (sortObject.get().getDescendingSort()) {
+                sort = Optional.of(Sort.by(sortObject.get().getSortField()).descending());
+            } else {
+                sort = Optional.of(Sort.by(sortObject.get().getSortField()).ascending());
+            }
+        }
+        Pageable pager = PageRequest.of(paginationObject.getPageNumber(), paginationObject.getPageSize());
+        if (sort.isPresent()) {
+            pager = PageRequest.of(paginationObject.getPageNumber(), paginationObject.getPageSize(), sort.get());
+        }
+        return pager;
+    }
 
-    public List<Candidate> getList() {
-        return this.candidateRepository.findAll();
+    public Page<Candidate> getList(Principal principal, PaginationObject paginationObject, Optional<SortObject> sortObject) {
+        boolean userIsAdmin = this.userService.isGivenUserAdmin(principal);
+        if (userIsAdmin) {
+            Pageable pager = this.createPager(paginationObject, sortObject);
+            return this.candidateRepository.findAll(pager);
+        } else {
+            throw new GenericException("You must be ADMIN to view all jobs");
+        }
     }
 
     public Candidate add(Candidate candidate) {
