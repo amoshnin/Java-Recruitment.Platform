@@ -32,6 +32,7 @@ public class RecruiterController {
     @Operation(summary = "Endpoint (for ADMIN to create a new recruiter)", description = "", tags = {"recruiters"})
     @PostMapping(path = "item")
     public ResponseEntity<Object> add(@Valid @RequestBody Recruiter recruiter) {
+        System.out.println("tttyyy");
         if (this.userService.doesEmailExist(recruiter.getEmail())) {
             throw new FoundException(String.format("User with given email: %s already exist", recruiter.getEmail()));
         } else {
@@ -47,7 +48,9 @@ public class RecruiterController {
 
     @Operation(summary = "Endpoint (for ADMIN to view details of any recruiter) OR (for RECRUITER to view details of himself)", description = "", tags = {"recruiters"})
     @GetMapping(path = "item/{recruiterId}")
-    public Recruiter getItem(@RequestBody Long recruiterId, Principal principal) {
+    public Recruiter getItem(@PathVariable Long recruiterId, Principal principal) {
+        System.out.println("HEYEHYEHEH");
+        System.out.println(recruiterId);
         return this.recruiterService.getItemById(recruiterId, principal);
     }
 

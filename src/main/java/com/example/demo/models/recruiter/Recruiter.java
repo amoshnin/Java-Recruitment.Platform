@@ -53,7 +53,8 @@ public class Recruiter implements Model {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private final List<String> permissions = Arrays.asList(
             "permissions:menu-jobs",
-            "permissions:menu-candidates"
+            "permissions:menu-candidates",
+            "permissions:create-job"
     );
 
     @OneToMany(mappedBy="recruiter")
