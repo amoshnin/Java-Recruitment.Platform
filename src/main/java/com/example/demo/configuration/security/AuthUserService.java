@@ -34,11 +34,7 @@ public class AuthUserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        System.out.println("AaaaAAA");
-        log.info("email " + email);
         Model user = this.userService.findUserByEmail(email);
-        log.info("uu email " + user.getEmail());
-        log.info("uu email " + user.getRole());
         AuthUserPrincipal userPrincipal = new AuthUserPrincipal(user);
         return userPrincipal;
     }

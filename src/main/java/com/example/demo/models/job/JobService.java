@@ -79,8 +79,6 @@ public class JobService {
     }
 
     public Job getItem(Long jobId, Principal principal) {
-        System.out.println("jobid get " + jobId);
-        System.out.println("princ get " + principal.getName());
         Optional<Job> row = this.jobRepository.findById(jobId);
         System.out.println("present: " + row.isPresent());
         if (row.isPresent()) {
