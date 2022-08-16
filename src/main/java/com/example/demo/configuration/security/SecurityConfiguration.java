@@ -80,13 +80,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // RECRUITER can view details of his job (importantly, only his job)
                 .antMatchers(HttpMethod.GET,"/api/jobs/item/{jobId}").hasAnyRole("RECRUITER", "ADMIN")
                 // RECRUITER can list all his jobs (importantly, only his jobs)
-                .antMatchers(HttpMethod.GET,"/api/jobs/list").hasRole("RECRUITER")
+                .antMatchers(HttpMethod.GET,"/api/jobs/list/{recruiterId}").hasAnyRole("RECRUITER", "ADMIN")
                 // ... pagination
-                .antMatchers(HttpMethod.GET,"/api/jobs/list/{offset}/{pageSize}").hasRole("RECRUITER")
+                .antMatchers(HttpMethod.GET,"/api/jobs/list/{recruiterId}/{offset}/{pageSize}").hasAnyRole("RECRUITER", "ADMIN")
                 // ... sorting
-                .antMatchers(HttpMethod.GET,"/api/jobs/list/sorted/{sortField}/{descendingSort}").hasRole("RECRUITER")
+                .antMatchers(HttpMethod.GET,"/api/jobs/list/sorted/{recruiterId}/{sortField}/{descendingSort}").hasAnyRole("RECRUITER", "ADMIN")
                 // ... sorting ... pagination
-                .antMatchers(HttpMethod.GET,"/api/jobs/list/sorted/{sortField}/{descendingSort}/{offset}/{pageSize}").hasRole("RECRUITER")
+                .antMatchers(HttpMethod.GET,"/api/jobs/list/sorted/{recruiterId}/{sortField}/{descendingSort}/{offset}/{pageSize}").hasAnyRole("RECRUITER", "ADMIN")
                 // ADMIN can list all jobs (importantly, all jobs)
                 .antMatchers(HttpMethod.GET,"/api/jobs/listAll").hasRole("ADMIN")
                 // ... pagination

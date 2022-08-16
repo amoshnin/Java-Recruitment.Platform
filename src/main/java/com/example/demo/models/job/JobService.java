@@ -112,17 +112,25 @@ public class JobService {
         return pager;
     }
 
-    public Page<Job> getMyListAsRecruiter(
+    public Page<Job> getListOfJobs(
+            Long recruiterId,
             Principal principal,
             PaginationObject paginationObject,
             Optional<SortObject> sortObject) {
         Pageable pager = this.createPager(paginationObject, sortObject);
-        System.out.println(pager.getPageNumber());
-        System.out.println( pager.getPageSize());
-        System.out.println(pager.getOffset());
-        Long principalId = this.userService.findUserByEmail(principal.getName()).getId();
-        Page<Job> page = this.jobRepository.findAllByRecruiter_Id(principalId, pager);
-        return page;
+        boolean isAdmin = this.userService.isGivenUserAdmin(principal);
+        if (isAdmin) {
+            Page<Job> page = this.jobRepository.findAllByRecruiter_Id(recruiterId, pager);
+            return page;
+        } else {
+            Long principalId = this.userService.findUserByEmail(principal.getName()).getId();
+            if (principalId.equals(recruiterId)) {
+                Page<Job> page = this.jobRepository.findAllByRecruiter_Id(principalId, pager);
+                return page;
+            } else {
+                throw new GenericException("You're not allowed to access this resource because you're not the recruiter of whom you're trying to get the resource of");
+            }
+        }
     }
 
     public Page<Job> getAllListAsAdmin(
