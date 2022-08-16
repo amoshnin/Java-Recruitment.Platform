@@ -54,7 +54,8 @@ public class Recruiter implements Model {
     private final List<String> permissions = Arrays.asList(
             "permissions:menu-jobs",
             "permissions:menu-candidates",
-            "permissions:create-job"
+            "permissions:create-job",
+            "permissions:create-jobs"
     );
 
     @OneToMany(mappedBy="recruiter")
