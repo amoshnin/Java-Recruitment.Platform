@@ -58,4 +58,8 @@ public class UserService {
     public boolean isGivenUserAdmin(Principal principal) {
         return this.adminRepository.findAdminByEmail(principal.getName()).isPresent();
     }
+
+    public boolean isGivenUserRecruiter(Principal principal) {
+        return this.recruiterRepository.findRecruiterByEmail(principal.getName()).isPresent();
+    }
 }

@@ -54,11 +54,12 @@ public class CandidateService {
 
     public Page<Candidate> getList(Principal principal, PaginationObject paginationObject, Optional<SortObject> sortObject) {
         boolean userIsAdmin = this.userService.isGivenUserAdmin(principal);
-        if (userIsAdmin) {
+        boolean userIsRecruiter = this.userService.isGivenUserRecruiter(principal);
+        if (userIsAdmin || userIsRecruiter) {
             Pageable pager = this.createPager(paginationObject, sortObject);
             return this.candidateRepository.findAll(pager);
         } else {
-            throw new GenericException("You must be ADMIN to view all jobs");
+            throw new GenericException("You must be ADMIN or RECRUITER to view all jobs");
         }
     }
 
