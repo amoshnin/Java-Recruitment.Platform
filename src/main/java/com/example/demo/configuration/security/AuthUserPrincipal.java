@@ -14,6 +14,8 @@ import java.util.List;
 public class AuthUserPrincipal implements UserDetails {
     private Model user;
 
+    public Model getUser() { return this.user; };
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> roles = new ArrayList<>();
